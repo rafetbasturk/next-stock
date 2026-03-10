@@ -1,0 +1,31 @@
+"use client";
+
+import { useState } from "react";
+import { PlusIcon } from "lucide-react";
+import { useTranslations } from "next-intl";
+
+import { DeliveryUpsertDialog } from "@/components/deliveries/delivery-upsert-dialog";
+import { Button } from "@/components/ui/button";
+
+export function CreateDeliveryButton() {
+  const tApp = useTranslations("App");
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <Button type="button" size="sm" onClick={() => setOpen(true)}>
+        <PlusIcon />
+        <span className="hidden sm:inline">{tApp("actions.add")}</span>
+      </Button>
+
+      {open ? (
+        <DeliveryUpsertDialog
+          key="create-delivery-dialog"
+          mode="create"
+          open={open}
+          onOpenChange={setOpen}
+        />
+      ) : null}
+    </>
+  );
+}

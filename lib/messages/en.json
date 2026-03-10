@@ -1,0 +1,871 @@
+{
+  "App": {
+    "navigation": {
+      "overview": "Overview",
+      "orders": "Orders",
+      "orderTracking": "Order Tracking",
+      "products": "Products",
+      "movements": "Movements",
+      "customers": "Customers",
+      "report": "Report",
+      "maintenance": "Maintenance",
+      "deliveries": "Deliveries"
+    },
+    "pageTitles": {
+      "overview": "Overview",
+      "orders": "Orders",
+      "orderTracking": "Order Tracking",
+      "products": "Products",
+      "productDetail": "Product Details",
+      "movements": "Movements",
+      "customers": "Customers",
+      "report": "Report",
+      "maintenance": "Maintenance",
+      "deliveries": "Deliveries"
+    },
+    "actions": {
+      "filter": "Filter",
+      "add": "Add"
+    }
+  },
+  "HomePage": {
+    "title": "Hello world!",
+    "keyMetrics": {
+      "title": "Key Metrics",
+      "errorTitle": "Metrics could not be loaded",
+      "supportReference": "Support reference: {requestId}",
+      "retry": "Retry",
+      "cards": {
+        "totalRevenue": {
+          "title": "Total Order Amount",
+          "description": "Total amount of all orders",
+          "badge": "{count, plural, one {# total order} other {# total orders}}"
+        },
+        "deliveredRevenue": {
+          "title": "Delivered Order Amount",
+          "description": "Amount of completed deliveries",
+          "badge": "{count, plural, one {# completed order} other {# completed orders}}"
+        },
+        "openRevenue": {
+          "title": "Open Order Amount",
+          "description": "Amount of pending orders",
+          "badge": "{count, plural, one {# open order} other {# open orders}}"
+        }
+      }
+    },
+    "monthlyOverview": {
+      "title": "Monthly Overview",
+      "errorTitle": "Monthly overview could not be loaded",
+      "supportReference": "Support reference: {requestId}",
+      "retry": "Retry",
+      "labels": {
+        "orders": "Order Count",
+        "deliveries": "Delivery Count",
+        "revenue": "Order Amount",
+        "deliveredRevenue": "Delivered Amount"
+      },
+      "pieces": "{count, plural, one {# pcs} other {# pcs}}",
+      "axes": {
+        "count": "Count (pcs)",
+        "amount": "Amount ({currency})"
+      },
+      "empty": "No monthly data found for the selected filters."
+    },
+    "filters": {
+      "trigger": "Filter",
+      "title": "Filter",
+      "allYears": "All years",
+      "allCustomers": "All customers",
+      "clear": "Clear",
+      "apply": "Apply"
+    }
+  },
+  "NotFoundPage": {
+    "title": "Page not found",
+    "description": "The page you requested does not exist or is no longer available.",
+    "hint": "Check the address or return to the dashboard.",
+    "goHome": "Go home"
+  },
+  "Table": {
+    "filters": {
+      "trigger": "Filter",
+      "title": "Filter",
+      "allYears": "All years",
+      "allCustomers": "All customers",
+      "clear": "Clear",
+      "apply": "Apply",
+      "search": "Search",
+      "date": "Date",
+      "range": "Date range",
+      "startDate": "Start date",
+      "endDate": "End date"
+    },
+    "multiSelect": {
+      "all": "All",
+      "selected": "{count} selected",
+      "searchPlaceholder": "Search {label}...",
+      "noResults": "No results found."
+    }
+  },
+  "ProductsTable": {
+    "columns": {
+      "code": "Code",
+      "name": "Name",
+      "quantity": "Quantity",
+      "price": "Price",
+      "customer": "Customer",
+      "otherCodes": "Other Codes",
+      "material": "Material",
+      "postProcess": "Post Process",
+      "coating": "Coating",
+      "specifications": "Specifications",
+      "netSpecs": "Net Specs",
+      "notes": "Notes"
+    },
+    "actions": {
+      "edit": "Edit",
+      "adjustStock": "Add / Subtract Stock",
+      "stockMovements": "Stock Movements",
+      "delete": "Delete"
+    },
+    "filters": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search products...",
+      "clearSearch": "Clear search",
+      "clearAll": "Clear all",
+      "columns": "Columns",
+      "dateRangePlaceholder": "Date range",
+      "dateFromLabel": "Start date",
+      "dateToLabel": "End date",
+      "selectPlaceholder": "Select filter",
+      "multiSelectPlaceholder": "Multi-select filter (coming soon)",
+      "selectOptions": {
+        "all": "All",
+        "optionA": "Option A",
+        "optionB": "Option B"
+      }
+    },
+    "empty": "No products found.",
+    "showing": "Showing {from}-{to} of {total} products",
+    "rowsPerPage": "Rows",
+    "updating": "Updating...",
+    "page": "Page {current} of {total}",
+    "previous": "Previous",
+    "next": "Next",
+    "errors": {
+      "loadFailed": "Products could not be loaded."
+    },
+    "create": {
+      "dialogTitle": "Create Product",
+      "dialogDescription": "Add a new product record.",
+      "tabs": {
+        "basicInfo": "Basic Info",
+        "technicalInfo": "Technical Info"
+      },
+      "fields": {
+        "code": "Code",
+        "name": "Name",
+        "customer": "Customer",
+        "unit": "Unit",
+        "currency": "Currency",
+        "price": "Price",
+        "initialStock": "Initial stock",
+        "minStockLevel": "Min stock level",
+        "material": "Material",
+        "coating": "Coating",
+        "postProcess": "Post Process",
+        "specs": "Specifications",
+        "specsNet": "Net Specifications",
+        "notes": "Notes"
+      },
+      "placeholders": {
+        "code": "e.g. P-0001",
+        "name": "e.g. Shaft",
+        "customer": "Select customer",
+        "customerLoading": "Loading customers...",
+        "material": "e.g. 4140",
+        "coating": "e.g. Zinc coating",
+        "postProcess": "e.g. Nitriding",
+        "specs": "e.g. 40x20x10",
+        "specsNet": "e.g. 39.8x19.8x9.8",
+        "notes": "Optional notes"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "create": "Create"
+      },
+      "toasts": {
+        "createSuccess": "Product created successfully.",
+        "createFailed": "Product could not be created."
+      }
+    },
+    "edit": {
+      "dialogTitle": "Edit Product",
+      "dialogDescription": "Update product details and stock adjustment.",
+      "fields": {
+        "currentStock": "Current stock",
+        "stockActionType": "Stock action",
+        "stockActionQuantity": "Adjustment quantity",
+        "stockActionNotes": "Adjustment notes"
+      },
+      "stockAction": {
+        "none": "No adjustment",
+        "in": "Increase stock",
+        "out": "Decrease stock"
+      },
+      "placeholders": {
+        "stockActionNotes": "Optional stock adjustment note"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "toasts": {
+        "updateSuccess": "Product updated successfully.",
+        "updateFailed": "Product could not be updated.",
+        "insufficientStock": "Stock cannot go below zero.",
+        "productNotFound": "Product not found."
+      }
+    },
+    "adjustStock": {
+      "dialogTitle": "Adjust Stock - {code}",
+      "dialogDescription": "Create a stock movement for this product.",
+      "dialogTitleEdit": "Edit Stock Movement - {code}",
+      "dialogDescriptionEdit": "Update this stock movement.",
+      "fields": {
+        "currentStock": "Current stock",
+        "action": "Action",
+        "targetProduct": "Target product",
+        "removeMovement": "Movement to remove",
+        "quantity": "Quantity",
+        "notes": "Notes"
+      },
+      "actions": {
+        "in": "Add stock",
+        "transfer": "Transfer",
+        "remove": "Remove movement",
+        "out": "Subtract stock"
+      },
+      "placeholders": {
+        "notes": "Optional note",
+        "targetProduct": "Select target product",
+        "removeMovement": "Select movement"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "toasts": {
+        "success": "Stock movement saved.",
+        "removed": "Stock movement removed.",
+        "failed": "Stock movement could not be saved.",
+        "invalidQuantity": "Quantity must be greater than zero.",
+        "invalidTargetProduct": "Please select a valid target product.",
+        "invalidMovement": "Please select a movement to remove.",
+        "insufficientStock": "Insufficient stock.",
+        "productNotFound": "Product not found.",
+        "movementNotFound": "Movement not found.",
+        "notEditable": "This movement type cannot be edited.",
+        "notRemovable": "This movement type cannot be removed."
+      }
+    },
+    "delete": {
+      "dialogTitle": "Delete Product",
+      "dialogDescription": "Delete product {code}? This action cannot be undone.",
+      "buttons": {
+        "cancel": "Cancel",
+        "confirm": "Delete"
+      },
+      "toasts": {
+        "deleteSuccess": "Product deleted.",
+        "deleteFailed": "Product could not be deleted.",
+        "productHasStock": "Product has stock and cannot be deleted.",
+        "productNotFound": "Product not found."
+      }
+    }
+  },
+  "MovementsTable": {
+    "columns": {
+      "createdAt": "Date",
+      "product": "Product",
+      "movementType": "Type",
+      "quantity": "Quantity",
+      "reference": "Reference",
+      "createdBy": "User",
+      "notes": "Notes"
+    },
+    "movementTypes": {
+      "IN": "IN",
+      "OUT": "OUT",
+      "DELIVERY": "DELIVERY",
+      "RETURN": "RETURN",
+      "ADJUSTMENT": "ADJUSTMENT",
+      "INITIAL": "INITIAL",
+      "TRANSFER": "TRANSFER"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete",
+      "viewDetails": "View details",
+      "goToProduct": "Go to product",
+      "goToReference": "Go to reference"
+    },
+    "delete": {
+      "dialogTitle": "Delete Movement",
+      "dialogDescription": "Delete movement #{id}? This action cannot be undone.",
+      "buttons": {
+        "cancel": "Cancel",
+        "confirm": "Delete"
+      },
+      "toasts": {
+        "success": "Movement deleted.",
+        "failed": "Movement could not be deleted.",
+        "notFound": "Movement not found.",
+        "notRemovable": "This movement type cannot be deleted.",
+        "insufficientStock": "Insufficient stock to rollback this movement."
+      }
+    },
+    "details": {
+      "dialogTitle": "Movement #{id}",
+      "dialogDescription": "Movement details and metadata.",
+      "fields": {
+        "id": "ID",
+        "product": "Product",
+        "movementType": "Movement type",
+        "quantity": "Quantity",
+        "reference": "Reference",
+        "createdBy": "User",
+        "createdAt": "Created at",
+        "notes": "Notes"
+      }
+    },
+    "filters": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search movements...",
+      "movementType": "Movement type",
+      "allTypes": "All types",
+      "productId": "Product ID",
+      "clearSearch": "Clear search",
+      "clearChip": "Clear filter",
+      "clearAll": "Clear all",
+      "columns": "Columns"
+    },
+    "empty": "No stock movements found.",
+    "showing": "Showing {from}-{to} of {total} movements",
+    "rowsPerPage": "Rows",
+    "updating": "Updating...",
+    "page": "Page {current} of {total}",
+    "errors": {
+      "loadFailed": "Stock movements could not be loaded."
+    }
+  },
+  "CustomersTable": {
+    "columns": {
+      "code": "Code",
+      "name": "Name",
+      "email": "Email",
+      "phone": "Phone",
+      "address": "Address"
+    },
+    "filters": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search customers...",
+      "clearSearch": "Clear search",
+      "clearAll": "Clear all",
+      "columns": "Columns"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "create": {
+      "dialogTitle": "Create Customer",
+      "dialogDescription": "Add a new customer record.",
+      "fields": {
+        "code": "Code",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "address": "Address"
+      },
+      "placeholders": {
+        "code": "e.g. C-0001",
+        "name": "e.g. Acme Ltd.",
+        "email": "e.g. mail@company.com",
+        "phone": "e.g. +90 555 123 45 67",
+        "address": "Customer address"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "create": "Create"
+      },
+      "toasts": {
+        "createSuccess": "Customer created successfully.",
+        "createFailed": "Customer could not be created."
+      }
+    },
+    "edit": {
+      "dialogTitle": "Edit Customer",
+      "dialogDescription": "Update customer details.",
+      "buttons": {
+        "cancel": "Cancel",
+        "save": "Save"
+      },
+      "toasts": {
+        "updateSuccess": "Customer updated successfully.",
+        "updateFailed": "Customer could not be updated.",
+        "customerNotFound": "Customer not found."
+      }
+    },
+    "delete": {
+      "dialogTitle": "Delete Customer",
+      "dialogDescription": "Delete customer {code}? This action cannot be undone.",
+      "buttons": {
+        "cancel": "Cancel",
+        "confirm": "Delete"
+      },
+      "toasts": {
+        "deleteSuccess": "Customer deleted.",
+        "deleteFailed": "Customer could not be deleted.",
+        "customerHasActiveOrders": "Customer has active orders and cannot be deleted.",
+        "customerNotFound": "Customer not found."
+      }
+    },
+    "empty": "No customers found.",
+    "showing": "Showing {from}-{to} of {total} customers",
+    "rowsPerPage": "Rows",
+    "updating": "Updating...",
+    "page": "Page {current} of {total}",
+    "errors": {
+      "loadFailed": "Customers could not be loaded."
+    }
+  },
+  "OrdersTable": {
+    "columns": {
+      "orderNumber": "Order No",
+      "orderDate": "Order Date",
+      "customer": "Customer",
+      "deliveryAddress": "Delivery Address",
+      "status": "Status",
+      "currency": "Currency",
+      "totalAmount": "Total Amount",
+      "notes": "Notes"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "create": {
+      "dialogTitle": "Create Order",
+      "dialogDescription": "Add a new order with customer and products.",
+      "sections": {
+        "basic": "Basic Information"
+      },
+      "toggleCustom": {
+        "label": "Custom order",
+        "on": "On",
+        "off": "Off"
+      },
+      "table": {
+        "rowNo": "Row",
+        "action": "Action",
+        "description": "Description",
+        "unit": "Unit"
+      },
+      "fields": {
+        "orderNumber": "Order Number",
+        "orderDate": "Order Date",
+        "customer": "Customer",
+        "currency": "Currency",
+        "deliveryAddress": "Delivery Address",
+        "notes": "Notes",
+        "product": "Product",
+        "quantity": "Quantity",
+        "unitPrice": "Unit Price",
+        "lineTotal": "Line Total",
+        "total": "Total"
+      },
+      "placeholders": {
+        "orderNumber": "e.g. ORD-2026-001",
+        "customer": "Select customer",
+        "deliveryAddress": "Delivery address",
+        "notes": "Optional note",
+        "product": "Select product",
+        "unitPrice": "0,00",
+        "customItemName": "Custom item name",
+        "customItemUnit": "unit"
+      },
+      "items": {
+        "title": "Order Items"
+      },
+      "buttons": {
+        "addRow": "Add Row",
+        "cancel": "Cancel",
+        "create": "Create",
+        "saving": "Saving..."
+      },
+      "toasts": {
+        "createSuccess": "Order created successfully.",
+        "createFailed": "Order could not be created."
+      },
+      "emptyDescription": "You can create the order after adding at least one row."
+    },
+    "edit": {
+      "dialogTitle": "Edit Order",
+      "dialogDescription": "Update order details and items.",
+      "buttons": {
+        "save": "Save"
+      },
+      "toasts": {
+        "updateSuccess": "Order updated.",
+        "updateFailed": "Order could not be updated.",
+        "orderNotFound": "Order not found.",
+        "orderHasDeliveries": "Orders with deliveries cannot be edited."
+      }
+    },
+    "delete": {
+      "dialogTitle": "Delete Order",
+      "dialogDescription": "Delete order {orderNumber}?",
+      "buttons": {
+        "cancel": "Cancel",
+        "confirm": "Delete"
+      },
+      "toasts": {
+        "deleteSuccess": "Order deleted.",
+        "deleteFailed": "Order could not be deleted.",
+        "orderNotFound": "Order not found.",
+        "orderHasDeliveries": "Orders with deliveries cannot be deleted."
+      }
+    },
+    "status": {
+      "KAYIT": "Registered",
+      "ÜRETİM": "In Production",
+      "KISMEN_HAZIR": "Partially Ready",
+      "HAZIR": "Ready",
+      "BİTTİ": "Completed",
+      "İPTAL": "Cancelled"
+    },
+    "filters": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search orders...",
+      "status": "Status",
+      "allStatuses": "All statuses",
+      "clearSearch": "Clear search",
+      "clearAll": "Clear all",
+      "columns": "Columns"
+    },
+    "empty": "No orders found.",
+    "showing": "Showing {from}-{to} of {total} orders",
+    "rowsPerPage": "Rows",
+    "updating": "Updating...",
+    "page": "Page {current} of {total}",
+    "errors": {
+      "loadFailed": "Orders could not be loaded."
+    },
+    "history": {
+      "title": "Order Items & Delivery Progress",
+      "loadFailed": "History could not be loaded.",
+      "empty": "No order items found.",
+      "completedCount": "{completed} / {total} completed",
+      "none": "No shipment history",
+      "qtySuffix": "pcs",
+      "latestMovement": "Latest movement",
+      "movementsCount": "{count} movements",
+      "moreMovements": "+{count} more",
+      "itemType": {
+        "standard": "Product",
+        "custom": "Custom"
+      },
+      "summary": {
+        "items": "Items",
+        "ordered": "Ordered",
+        "delivered": "Delivered",
+        "remaining": "Remaining",
+        "completion": "Completion"
+      },
+      "status": {
+        "missing": "{count} missing",
+        "completed": "Completed"
+      },
+      "columns": {
+        "status": "Status",
+        "product": "Product",
+        "progress": "Progress",
+        "ordered": "Ordered",
+        "delivered": "Delivered",
+        "remaining": "Remaining",
+        "shipmentHistory": "Shipment History"
+      }
+    }
+  },
+  "OrderTrackingTable": {
+    "actions": {
+      "openRoute": "Tracking"
+    },
+    "columns": {
+      "orderNumber": "Order No",
+      "lineNumber": "Line No",
+      "orderDate": "Order Date",
+      "customer": "Customer",
+      "deliveryAddress": "Delivery Address",
+      "materialCode": "Material Code",
+      "materialName": "Material Name",
+      "stock": "Stock",
+      "orderedQuantity": "Ordered",
+      "deliveredQuantity": "Sent",
+      "remainingQuantity": "Remaining",
+      "deliveryHistory": "Delivery History",
+      "status": "Status",
+      "unitPrice": "Price",
+      "currency": "Currency",
+      "unit": "Unit"
+    },
+    "status": {
+      "KAYIT": "Registered",
+      "ÜRETİM": "In Production",
+      "KISMEN_HAZIR": "Partially Ready",
+      "HAZIR": "Ready",
+      "BİTTİ": "Completed",
+      "İPTAL": "Cancelled"
+    },
+    "filters": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search tracking rows...",
+      "status": "Status",
+      "shortageOnly": "Shortage only",
+      "clearSearch": "Clear search",
+      "clearAll": "Clear all"
+    },
+    "mobile": {
+      "lineLabel": "Line No: {lineNumber}"
+    },
+    "history": {
+      "none": "No delivery history"
+    },
+    "empty": "No open order lines found.",
+    "showing": "Showing {from}-{to} of {total} order lines",
+    "rowsPerPage": "Rows",
+    "updating": "Updating...",
+    "page": "Page {current} of {total}",
+    "errors": {
+      "loadFailed": "Tracking rows could not be loaded."
+    }
+  },
+  "DeliveriesTable": {
+    "columns": {
+      "deliveryNumber": "Delivery No",
+      "deliveryDate": "Delivery Date",
+      "customer": "Customer",
+      "kind": "Type",
+      "totalAmount": "Total Amount",
+      "notes": "Notes"
+    },
+    "kinds": {
+      "delivery": "Delivery",
+      "return": "Return"
+    },
+    "actions": {
+      "edit": "Edit",
+      "delete": "Delete"
+    },
+    "create": {
+      "toasts": {
+        "createSuccess": "Delivery created successfully.",
+        "createFailed": "Delivery could not be created."
+      }
+    },
+    "edit": {
+      "toasts": {
+        "updateSuccess": "Delivery updated.",
+        "updateFailed": "Delivery could not be updated.",
+        "deliveryNotFound": "Delivery not found.",
+        "returnExceedsDelivered": "Return quantity exceeds delivered amount.",
+        "kindChangeNotAllowed": "Delivery type cannot be changed."
+      }
+    },
+    "delete": {
+      "dialogTitle": "Delete Delivery",
+      "dialogDescription": "Delete delivery {deliveryNumber}?",
+      "buttons": {
+        "cancel": "Cancel",
+        "confirm": "Delete"
+      },
+      "toasts": {
+        "deleteSuccess": "Delivery deleted.",
+        "deleteFailed": "Delivery could not be deleted.",
+        "deliveryNotFound": "Delivery not found."
+      }
+    },
+    "filters": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search deliveries...",
+      "clearSearch": "Clear search",
+      "clearAll": "Clear all",
+      "columns": "Columns",
+      "clearChip": "Clear filter"
+    },
+    "form": {
+      "titleCreate": "Create Delivery",
+      "titleEdit": "Edit Delivery",
+      "description": "Fill delivery details and save.",
+      "sections": {
+        "items": "Delivery Items"
+      },
+      "fields": {
+        "customer": "Customer",
+        "deliveryNumber": "Delivery No",
+        "kind": "Document Type",
+        "notes": "Notes",
+        "deliveryDate": "Delivery Date",
+        "orderNumber": "Order No",
+        "productCode": "Product Code",
+        "productName": "Product Name",
+        "unit": "Unit",
+        "stock": "Stock",
+        "price": "Price",
+        "deliveredQuantity": "Delivery Quantity",
+        "total": "Total"
+      },
+      "placeholders": {
+        "deliveryNumber": "e.g. DLV-2026-0001",
+        "notes": "Optional note",
+        "selectOrder": "Select order",
+        "selectProduct": "Select product"
+      },
+      "kind": {
+        "delivery": "Delivery",
+        "return": "Return"
+      },
+      "buttons": {
+        "cancel": "Cancel",
+        "create": "Create",
+        "update": "Update",
+        "creating": "Creating...",
+        "updating": "Updating...",
+        "addItem": "Add Item"
+      },
+      "emptyItems": {
+        "title": "No delivery item added yet",
+        "description": "Use the button below to add an item to the list"
+      },
+      "badges": {
+        "ordered": "ordered",
+        "sent": "net shipped",
+        "remaining": "remaining"
+      },
+      "labels": {
+        "subtotal": "Subtotal"
+      }
+    },
+    "empty": "No deliveries found.",
+    "showing": "Showing {from}-{to} of {total} deliveries",
+    "rowsPerPage": "Rows",
+    "updating": "Updating...",
+    "page": "Page {current} of {total}",
+    "errors": {
+      "loadFailed": "Deliveries could not be loaded."
+    },
+    "history": {
+      "title": "Delivery Items & Shipment Progress",
+      "loadFailed": "Delivery history could not be loaded.",
+      "empty": "No delivery items found.",
+      "none": "No shipment history",
+      "qtySuffix": "pcs",
+      "progress": "Progress",
+      "status": {
+        "missing": "{count} missing",
+        "completed": "Completed"
+      },
+      "columns": {
+        "orderNumber": "Order No",
+        "product": "Product",
+        "ordered": "Ordered",
+        "totalDelivered": "Total Delivered",
+        "currentDelivery": "Current Delivery",
+        "status": "Status",
+        "shipmentHistory": "Shipment History"
+      }
+    }
+  },
+  "ProductsDetail": {
+    "sections": {
+      "basic": "Basic Info",
+      "technical": "Technical Info",
+      "lifecycle": "Lifecycle",
+      "movements": "Stock Movements"
+    },
+    "badges": {
+      "lowStock": "Low Stock",
+      "inStock": "In Stock"
+    },
+    "movements": {
+      "description": "Latest stock movements for this product.",
+      "empty": "No stock movement has been recorded yet.",
+      "viewAll": "View all movements",
+      "reference": "Reference",
+      "by": "By"
+    },
+    "fields": {
+      "id": "ID",
+      "code": "Code",
+      "name": "Name",
+      "customer": "Customer",
+      "unit": "Unit",
+      "price": "Price",
+      "quantity": "Quantity",
+      "minStockLevel": "Min Stock Level",
+      "otherCodes": "Other Codes",
+      "material": "Material",
+      "postProcess": "Post Process",
+      "coating": "Coating",
+      "specs": "Specifications",
+      "specsNet": "Net Specifications",
+      "notes": "Notes",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At"
+    },
+    "emptyValue": "-"
+  },
+  "ReportPage": {
+    "stockIntegrity": {
+      "title": "Stock Integrity",
+      "description": "Compare cached product stock with the stock movement ledger and manually reconcile mismatches.",
+      "summary": {
+        "count": "{count, plural, =0 {No mismatches} one {# mismatch} other {# mismatches}}"
+      },
+      "actions": {
+        "refresh": "Refresh",
+        "reconcile": "Reconcile mismatches"
+      },
+      "table": {
+        "code": "Code",
+        "name": "Name",
+        "shelf": "Shelf",
+        "ledger": "Ledger",
+        "diff": "Diff"
+      },
+      "empty": "No stock mismatches found.",
+      "error": {
+        "title": "Stock integrity report could not be loaded."
+      },
+      "accessDenied": {
+        "title": "Admin access required",
+        "description": "Only admins can view or reconcile stock integrity issues."
+      },
+      "dialog": {
+        "title": "Reconcile stock mismatches?",
+        "description": "{count, plural, one {This will update 1 mismatched product to match the ledger.} other {This will update # mismatched products to match the ledger.}}",
+        "cancel": "Cancel",
+        "confirm": "Reconcile"
+      },
+      "toasts": {
+        "reconcileSuccess": "{count, plural, one {1 product reconciled.} other {# products reconciled.}}"
+      }
+    }
+  },
+  "validation": {
+    "required": "This field is required.",
+    "invalid": "Invalid value.",
+    "insufficientStock": "Insufficient stock."
+  }
+}

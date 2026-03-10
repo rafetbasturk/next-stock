@@ -1,0 +1,871 @@
+{
+  "App": {
+    "navigation": {
+      "overview": "Genel Bakış",
+      "orders": "Siparişler",
+      "orderTracking": "Sipariş Takip",
+      "products": "Ürünler",
+      "movements": "Hareketler",
+      "customers": "Müşteriler",
+      "report": "Rapor",
+      "maintenance": "Bakım",
+      "deliveries": "Teslimatlar"
+    },
+    "pageTitles": {
+      "overview": "Genel Bakış",
+      "orders": "Siparişler",
+      "orderTracking": "Sipariş Takip",
+      "products": "Ürünler",
+      "productDetail": "Ürün Ayrıntıları",
+      "movements": "Stok Hareketleri",
+      "customers": "Müşteriler",
+      "report": "Rapor",
+      "maintenance": "Bakım",
+      "deliveries": "Teslimatlar"
+    },
+    "actions": {
+      "filter": "Filtrele",
+      "add": "Ekle"
+    }
+  },
+  "HomePage": {
+    "title": "Merhaba!",
+    "keyMetrics": {
+      "title": "Temel Metrikler",
+      "errorTitle": "Metrikler yüklenemedi",
+      "supportReference": "Destek referansı: {requestId}",
+      "retry": "Tekrar dene",
+      "cards": {
+        "totalRevenue": {
+          "title": "Toplam Sipariş Tutarı",
+          "description": "Tüm siparişlerin toplam tutarı",
+          "badge": "{count} toplam sipariş"
+        },
+        "deliveredRevenue": {
+          "title": "Teslim Edilen Sipariş Tutarı",
+          "description": "Teslimatı tamamlanan siparişlerin tutarı",
+          "badge": "{count} tamamlanan sipariş"
+        },
+        "openRevenue": {
+          "title": "Açık Sipariş Tutarı",
+          "description": "Bekleyen siparişlerin tutarı",
+          "badge": "{count} açık sipariş"
+        }
+      }
+    },
+    "monthlyOverview": {
+      "title": "Aylık Genel Bakış",
+      "errorTitle": "Aylık genel bakış yüklenemedi",
+      "supportReference": "Destek referansı: {requestId}",
+      "retry": "Tekrar dene",
+      "labels": {
+        "orders": "Sipariş Adedi",
+        "deliveries": "Teslimat Adedi",
+        "revenue": "Toplam Sipariş Tutarı",
+        "deliveredRevenue": "Teslim Edilen Sipariş Tutarı"
+      },
+      "pieces": "{count} adet",
+      "axes": {
+        "count": "Adet",
+        "amount": "Tutar ({currency})"
+      },
+      "empty": "Seçili filtreler için aylık veri bulunamadı."
+    },
+    "filters": {
+      "trigger": "Filtrele",
+      "title": "Filtrele",
+      "allYears": "Tüm yıllar",
+      "allCustomers": "Tüm müşteriler",
+      "clear": "Temizle",
+      "apply": "Uygula"
+    }
+  },
+  "NotFoundPage": {
+    "title": "Sayfa bulunamadı",
+    "description": "İstediğiniz sayfa mevcut değil veya artık kullanılamıyor.",
+    "hint": "Adresi kontrol edin ya da panele geri dönün.",
+    "goHome": "Ana sayfaya dön"
+  },
+  "Table": {
+    "filters": {
+      "trigger": "Filtrele",
+      "title": "Filtrele",
+      "allYears": "Tüm yıllar",
+      "allCustomers": "Tüm müşteriler",
+      "clear": "Temizle",
+      "apply": "Uygula",
+      "search": "Ara",
+      "date": "Tarih",
+      "range": "Tarih Aralığı",
+      "startDate": "Başlangıç tarihi",
+      "endDate": "Bitiş tarihi"
+    },
+    "multiSelect": {
+      "all": "Tümü",
+      "selected": "{count} seçili",
+      "searchPlaceholder": "{label} ara...",
+      "noResults": "Sonuç bulunamadı."
+    }
+  },
+  "ProductsTable": {
+    "columns": {
+      "code": "Kod",
+      "name": "Ad",
+      "quantity": "Miktar",
+      "price": "Fiyat",
+      "customer": "Müşteri",
+      "otherCodes": "Diğer Kodlar",
+      "material": "Malzeme",
+      "postProcess": "Son İşlem",
+      "coating": "Kaplama",
+      "specifications": "Ölçü",
+      "netSpecs": "Net Ölçü",
+      "notes": "Notlar"
+    },
+    "actions": {
+      "edit": "Düzenle",
+      "adjustStock": "Stok Ekle / Çıkar",
+      "stockMovements": "Stok Hareketleri",
+      "delete": "Sil"
+    },
+    "filters": {
+      "searchLabel": "Arama",
+      "searchPlaceholder": "Ürün ara...",
+      "clearSearch": "Aramayı temizle",
+      "clearAll": "Tümünü temizle",
+      "columns": "Sütunlar",
+      "dateRangePlaceholder": "Tarih aralığı",
+      "dateFromLabel": "Başlangıç tarihi",
+      "dateToLabel": "Bitiş tarihi",
+      "selectPlaceholder": "Filtre seç",
+      "multiSelectPlaceholder": "Çoklu seçim filtresi (yakında)",
+      "selectOptions": {
+        "all": "Tümü",
+        "optionA": "Seçenek A",
+        "optionB": "Seçenek B"
+      }
+    },
+    "empty": "Ürün bulunamadı.",
+    "showing": "{from}-{to} arası, toplam {total} ürün",
+    "rowsPerPage": "Satır",
+    "updating": "Güncelleniyor...",
+    "page": "Sayfa {current} / {total}",
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "errors": {
+      "loadFailed": "Ürünler yüklenemedi."
+    },
+    "create": {
+      "dialogTitle": "Ürün Oluştur",
+      "dialogDescription": "Yeni bir ürün kaydı ekleyin.",
+      "tabs": {
+        "basicInfo": "Temel Bilgiler",
+        "technicalInfo": "Teknik Bilgiler"
+      },
+      "fields": {
+        "code": "Kod",
+        "name": "Ad",
+        "customer": "Müşteri",
+        "unit": "Birim",
+        "currency": "Para Birimi",
+        "price": "Fiyat",
+        "initialStock": "Başlangıç Stok",
+        "minStockLevel": "Minimum Stok",
+        "material": "Malzeme",
+        "coating": "Kaplama",
+        "postProcess": "Son İşlem",
+        "specs": "Ölçü",
+        "specsNet": "Net Ölçü",
+        "notes": "Notlar"
+      },
+      "placeholders": {
+        "code": "örn. P-0001",
+        "name": "örn. Mil",
+        "customer": "Müşteri seçin",
+        "customerLoading": "Müşteriler yükleniyor...",
+        "material": "örn. 4140",
+        "coating": "örn. Çinko kaplama",
+        "postProcess": "örn. Nitrasyon",
+        "specs": "örn. 40x20x10",
+        "specsNet": "örn. 39.8x19.8x9.8",
+        "notes": "İsteğe bağlı not"
+      },
+      "buttons": {
+        "cancel": "İptal",
+        "create": "Oluştur"
+      },
+      "toasts": {
+        "createSuccess": "Ürün başarıyla oluşturuldu.",
+        "createFailed": "Ürün oluşturulamadı."
+      }
+    },
+    "edit": {
+      "dialogTitle": "Ürünü Düzenle",
+      "dialogDescription": "Ürün detaylarını ve stok ayarını güncelleyin.",
+      "fields": {
+        "currentStock": "Mevcut stok",
+        "stockActionType": "Stok işlemi",
+        "stockActionQuantity": "İşlem miktarı",
+        "stockActionNotes": "İşlem notu"
+      },
+      "stockAction": {
+        "none": "İşlem yok",
+        "in": "Stok artır",
+        "out": "Stok azalt"
+      },
+      "placeholders": {
+        "stockActionNotes": "İsteğe bağlı stok işlem notu"
+      },
+      "buttons": {
+        "cancel": "İptal",
+        "save": "Kaydet"
+      },
+      "toasts": {
+        "updateSuccess": "Ürün başarıyla güncellendi.",
+        "updateFailed": "Ürün güncellenemedi.",
+        "insufficientStock": "Stok sıfırın altına düşemez.",
+        "productNotFound": "Ürün bulunamadı."
+      }
+    },
+    "adjustStock": {
+      "dialogTitle": "Stok Hareketi Ekle - {code}",
+      "dialogDescription": "Bu ürün için stok hareketi oluşturun.",
+      "dialogTitleEdit": "Stok Hareketi Düzenle - {code}",
+      "dialogDescriptionEdit": "Bu stok hareketini güncelleyin.",
+      "fields": {
+        "currentStock": "Mevcut stok",
+        "action": "İşlem",
+        "targetProduct": "Hedef ürün",
+        "removeMovement": "Silinecek hareket",
+        "quantity": "Miktar",
+        "notes": "Not"
+      },
+      "actions": {
+        "in": "EKLE",
+        "transfer": "TRANSFER",
+        "remove": "HAREKET SİL",
+        "out": "ÇIKAR"
+      },
+      "placeholders": {
+        "notes": "İsteğe bağlı not",
+        "targetProduct": "Hedef ürün seçin",
+        "removeMovement": "Hareket seçin"
+      },
+      "buttons": {
+        "cancel": "İptal",
+        "save": "Kaydet"
+      },
+      "toasts": {
+        "success": "Stok hareketi kaydedildi.",
+        "removed": "Stok hareketi silindi.",
+        "failed": "Stok hareketi kaydedilemedi.",
+        "invalidQuantity": "Miktar sıfırdan büyük olmalıdır.",
+        "invalidTargetProduct": "Geçerli bir hedef ürün seçin.",
+        "invalidMovement": "Silmek için bir hareket seçin.",
+        "insufficientStock": "Yetersiz stok.",
+        "productNotFound": "Ürün bulunamadı.",
+        "movementNotFound": "Hareket bulunamadı.",
+        "notEditable": "Bu hareket türü düzenlenemez.",
+        "notRemovable": "Bu hareket türü silinemez."
+      }
+    },
+    "delete": {
+      "dialogTitle": "Ürünü Sil",
+      "dialogDescription": "{code} ürünü silinsin mi? Bu işlem geri alınamaz.",
+      "buttons": {
+        "cancel": "İptal",
+        "confirm": "Sil"
+      },
+      "toasts": {
+        "deleteSuccess": "Ürün silindi.",
+        "deleteFailed": "Ürün silinemedi.",
+        "productHasStock": "Ürünün stoğu var, silinemez.",
+        "productNotFound": "Ürün bulunamadı."
+      }
+    }
+  },
+  "MovementsTable": {
+    "columns": {
+      "createdAt": "Tarih",
+      "product": "Ürün",
+      "movementType": "Tür",
+      "quantity": "Miktar",
+      "reference": "Referans",
+      "createdBy": "Kullanıcı",
+      "notes": "Notlar"
+    },
+    "movementTypes": {
+      "IN": "GİRİŞ",
+      "OUT": "ÇIKIŞ",
+      "DELIVERY": "TESLİMAT",
+      "RETURN": "İADE",
+      "ADJUSTMENT": "DÜZELTME",
+      "INITIAL": "BAŞLANGIÇ",
+      "TRANSFER": "TRANSFER"
+    },
+    "actions": {
+      "edit": "Düzenle",
+      "delete": "Sil",
+      "viewDetails": "Detayı görüntüle",
+      "goToProduct": "Ürüne git",
+      "goToReference": "Referansa git"
+    },
+    "delete": {
+      "dialogTitle": "Hareketi Sil",
+      "dialogDescription": "#{id} numaralı hareket silinsin mi? Bu işlem geri alınamaz.",
+      "buttons": {
+        "cancel": "İptal",
+        "confirm": "Sil"
+      },
+      "toasts": {
+        "success": "Hareket silindi.",
+        "failed": "Hareket silinemedi.",
+        "notFound": "Hareket bulunamadı.",
+        "notRemovable": "Bu hareket türü silinemez.",
+        "insufficientStock": "Bu hareket geri alınırken stok yetersiz."
+      }
+    },
+    "details": {
+      "dialogTitle": "Hareket #{id}",
+      "dialogDescription": "Hareket detayları ve meta bilgileri.",
+      "fields": {
+        "id": "ID",
+        "product": "Ürün",
+        "movementType": "Hareket türü",
+        "quantity": "Miktar",
+        "reference": "Referans",
+        "createdBy": "Kullanıcı",
+        "createdAt": "Oluşturulma",
+        "notes": "Notlar"
+      }
+    },
+    "filters": {
+      "searchLabel": "Arama",
+      "searchPlaceholder": "Stok hareketi ara...",
+      "movementType": "Hareket türü",
+      "allTypes": "Tüm türler",
+      "productId": "Ürün ID",
+      "clearSearch": "Aramayı temizle",
+      "clearChip": "Filtreyi temizle",
+      "clearAll": "Tümünü temizle",
+      "columns": "Sütunlar"
+    },
+    "empty": "Stok hareketi bulunamadı.",
+    "showing": "{from}-{to} arası, toplam {total} hareket",
+    "rowsPerPage": "Satır",
+    "updating": "Güncelleniyor...",
+    "page": "Sayfa {current} / {total}",
+    "errors": {
+      "loadFailed": "Stok hareketleri yüklenemedi."
+    }
+  },
+  "CustomersTable": {
+    "columns": {
+      "code": "Kod",
+      "name": "Ad",
+      "email": "E-posta",
+      "phone": "Telefon",
+      "address": "Adres"
+    },
+    "filters": {
+      "searchLabel": "Arama",
+      "searchPlaceholder": "Müşteri ara...",
+      "clearSearch": "Aramayı temizle",
+      "clearAll": "Tümünü temizle",
+      "columns": "Sütunlar"
+    },
+    "actions": {
+      "edit": "Düzenle",
+      "delete": "Sil"
+    },
+    "create": {
+      "dialogTitle": "Müşteri Oluştur",
+      "dialogDescription": "Yeni bir müşteri kaydı ekleyin.",
+      "fields": {
+        "code": "Kod",
+        "name": "Ad",
+        "email": "E-posta",
+        "phone": "Telefon",
+        "address": "Adres"
+      },
+      "placeholders": {
+        "code": "örn. C-0001",
+        "name": "örn. Acme Ltd.",
+        "email": "örn. mail@sirket.com",
+        "phone": "örn. +90 555 123 45 67",
+        "address": "Müşteri adresi"
+      },
+      "buttons": {
+        "cancel": "İptal",
+        "create": "Oluştur"
+      },
+      "toasts": {
+        "createSuccess": "Müşteri başarıyla oluşturuldu.",
+        "createFailed": "Müşteri oluşturulamadı."
+      }
+    },
+    "edit": {
+      "dialogTitle": "Müşteri Düzenle",
+      "dialogDescription": "Müşteri bilgilerini güncelleyin.",
+      "buttons": {
+        "cancel": "İptal",
+        "save": "Kaydet"
+      },
+      "toasts": {
+        "updateSuccess": "Müşteri başarıyla güncellendi.",
+        "updateFailed": "Müşteri güncellenemedi.",
+        "customerNotFound": "Müşteri bulunamadı."
+      }
+    },
+    "delete": {
+      "dialogTitle": "Müşteri Sil",
+      "dialogDescription": "{code} müşterisi silinsin mi? Bu işlem geri alınamaz.",
+      "buttons": {
+        "cancel": "İptal",
+        "confirm": "Sil"
+      },
+      "toasts": {
+        "deleteSuccess": "Müşteri silindi.",
+        "deleteFailed": "Müşteri silinemedi.",
+        "customerHasActiveOrders": "Müşterinin aktif siparişleri var, silinemez.",
+        "customerNotFound": "Müşteri bulunamadı."
+      }
+    },
+    "empty": "Müşteri bulunamadı.",
+    "showing": "{from}-{to} arası, toplam {total} müşteri",
+    "rowsPerPage": "Satır",
+    "updating": "Güncelleniyor...",
+    "page": "Sayfa {current} / {total}",
+    "errors": {
+      "loadFailed": "Müşteriler yüklenemedi."
+    }
+  },
+  "OrdersTable": {
+    "columns": {
+      "orderNumber": "Sipariş No",
+      "orderDate": "Sipariş Tarihi",
+      "customer": "Müşteri",
+      "deliveryAddress": "Teslimat Adresi",
+      "status": "Sipariş Durumu",
+      "currency": "Para Birimi",
+      "totalAmount": "Toplam Tutar",
+      "notes": "Notlar"
+    },
+    "actions": {
+      "edit": "Düzenle",
+      "delete": "Sil"
+    },
+    "create": {
+      "dialogTitle": "Sipariş Oluştur",
+      "dialogDescription": "Müşteri ve ürünlerle yeni bir sipariş ekleyin.",
+      "sections": {
+        "basic": "Temel Bilgiler"
+      },
+      "toggleCustom": {
+        "label": "Özel Sipariş",
+        "on": "Açık",
+        "off": "Kapalı"
+      },
+      "table": {
+        "rowNo": "Satır",
+        "action": "İşlem",
+        "description": "Açıklama",
+        "unit": "Birim"
+      },
+      "fields": {
+        "orderNumber": "Sipariş Numarası",
+        "orderDate": "Sipariş Tarihi",
+        "customer": "Müşteri",
+        "currency": "Para Birimi",
+        "deliveryAddress": "Teslimat Adresi",
+        "notes": "Notlar",
+        "product": "Ürün",
+        "quantity": "Miktar",
+        "unitPrice": "Birim Fiyat",
+        "lineTotal": "Satır Tutarı",
+        "total": "Toplam"
+      },
+      "placeholders": {
+        "orderNumber": "örn. ORD-2026-001",
+        "customer": "Müşteri seçin",
+        "deliveryAddress": "Teslimat adresi",
+        "notes": "İsteğe bağlı not",
+        "product": "Ürün seçin",
+        "unitPrice": "0,00",
+        "customItemName": "Özel ürün adı",
+        "customItemUnit": "adet"
+      },
+      "items": {
+        "title": "Sipariş Kalemleri"
+      },
+      "buttons": {
+        "addRow": "Satır Ekle",
+        "cancel": "İptal",
+        "create": "Oluştur",
+        "saving": "Kaydediliyor..."
+      },
+      "toasts": {
+        "createSuccess": "Sipariş başarıyla oluşturuldu.",
+        "createFailed": "Sipariş oluşturulamadı."
+      },
+      "emptyDescription": "En az bir satır ekleyerek siparişi oluşturabilirsiniz."
+    },
+    "edit": {
+      "dialogTitle": "Sipariş Düzenle",
+      "dialogDescription": "Sipariş bilgilerini ve kalemlerini güncelleyin.",
+      "buttons": {
+        "save": "Kaydet"
+      },
+      "toasts": {
+        "updateSuccess": "Sipariş güncellendi.",
+        "updateFailed": "Sipariş güncellenemedi.",
+        "orderNotFound": "Sipariş bulunamadı.",
+        "orderHasDeliveries": "Teslimatlı sipariş düzenlenemez."
+      }
+    },
+    "delete": {
+      "dialogTitle": "Siparişi Sil",
+      "dialogDescription": "{orderNumber} siparişi silinsin mi?",
+      "buttons": {
+        "cancel": "İptal",
+        "confirm": "Sil"
+      },
+      "toasts": {
+        "deleteSuccess": "Sipariş silindi.",
+        "deleteFailed": "Sipariş silinemedi.",
+        "orderNotFound": "Sipariş bulunamadı.",
+        "orderHasDeliveries": "Teslimatlı sipariş silinemez."
+      }
+    },
+    "status": {
+      "KAYIT": "Kayıt",
+      "ÜRETİM": "Üretim",
+      "KISMEN_HAZIR": "Kısmen Hazır",
+      "HAZIR": "Hazır",
+      "BİTTİ": "Bitti",
+      "İPTAL": "İptal"
+    },
+    "filters": {
+      "searchLabel": "Arama",
+      "searchPlaceholder": "Sipariş ara...",
+      "status": "Sipariş Durumu",
+      "allStatuses": "Tüm durumlar",
+      "clearSearch": "Aramayı temizle",
+      "clearAll": "Tümünü temizle",
+      "columns": "Sütunlar"
+    },
+    "empty": "Sipariş bulunamadı.",
+    "showing": "{from}-{to} arası, toplam {total} sipariş",
+    "rowsPerPage": "Satır",
+    "updating": "Güncelleniyor...",
+    "page": "Sayfa {current} / {total}",
+    "errors": {
+      "loadFailed": "Siparişler yüklenemedi."
+    },
+    "history": {
+      "title": "Sipariş Kalemleri ve Teslimat İlerlemesi",
+      "loadFailed": "Geçmiş yüklenemedi.",
+      "empty": "Sipariş kalemi bulunamadı.",
+      "completedCount": "{total} kalemden {completed} tamam",
+      "none": "Sevkiyat geçmişi yok",
+      "qtySuffix": "adet",
+      "latestMovement": "Son hareket",
+      "movementsCount": "{count} hareket",
+      "moreMovements": "+{count} daha",
+      "itemType": {
+        "standard": "Ürün",
+        "custom": "Özel"
+      },
+      "summary": {
+        "items": "Kalem",
+        "ordered": "Sipariş",
+        "delivered": "Teslim",
+        "remaining": "Kalan",
+        "completion": "Tamamlanma"
+      },
+      "status": {
+        "missing": "{count} eksik",
+        "completed": "Tamamlandı"
+      },
+      "columns": {
+        "status": "Durum",
+        "product": "Ürün",
+        "progress": "İlerleme",
+        "ordered": "Sipariş",
+        "delivered": "Teslim",
+        "remaining": "Kalan",
+        "shipmentHistory": "Sevkiyat Geçmişi"
+      }
+    }
+  },
+  "OrderTrackingTable": {
+    "actions": {
+      "openRoute": "Takip"
+    },
+    "columns": {
+      "orderNumber": "Sipariş No",
+      "lineNumber": "Kalem No",
+      "orderDate": "Sipariş Tarihi",
+      "customer": "Müşteri",
+      "deliveryAddress": "Teslimat Adresi",
+      "materialCode": "Malzeme Kodu",
+      "materialName": "Malzeme İsmi",
+      "stock": "Stok",
+      "orderedQuantity": "Sipariş Adedi",
+      "deliveredQuantity": "Gönderilen",
+      "remainingQuantity": "Kalan",
+      "deliveryHistory": "Teslimat Geçmişi",
+      "status": "Sipariş Durumu",
+      "unitPrice": "Fiyat",
+      "currency": "Para Birimi",
+      "unit": "Birim"
+    },
+    "status": {
+      "KAYIT": "Kayıt",
+      "ÜRETİM": "Üretim",
+      "KISMEN_HAZIR": "Kısmen Hazır",
+      "HAZIR": "Hazır",
+      "BİTTİ": "Bitti",
+      "İPTAL": "İptal"
+    },
+    "filters": {
+      "searchLabel": "Arama",
+      "searchPlaceholder": "Takip satırı ara...",
+      "status": "Sipariş Durumu",
+      "shortageOnly": "Eksik stok",
+      "clearSearch": "Aramayı temizle",
+      "clearAll": "Tümünü temizle"
+    },
+    "mobile": {
+      "lineLabel": "Kalem No: {lineNumber}"
+    },
+    "history": {
+      "none": "Teslimat geçmişi yok"
+    },
+    "empty": "Açık sipariş kalemi bulunamadı.",
+    "showing": "{from}-{to} arası, toplam {total} sipariş kalemi",
+    "rowsPerPage": "Satır",
+    "updating": "Güncelleniyor...",
+    "page": "Sayfa {current} / {total}",
+    "errors": {
+      "loadFailed": "Takip satırları yüklenemedi."
+    }
+  },
+  "DeliveriesTable": {
+    "columns": {
+      "deliveryNumber": "Teslimat No",
+      "deliveryDate": "Teslimat Tarihi",
+      "customer": "Müşteri",
+      "kind": "Tür",
+      "totalAmount": "Toplam Tutar",
+      "notes": "Notlar"
+    },
+    "kinds": {
+      "delivery": "Teslimat",
+      "return": "İade"
+    },
+    "actions": {
+      "edit": "Düzenle",
+      "delete": "Sil"
+    },
+    "create": {
+      "toasts": {
+        "createSuccess": "Teslimat başarıyla oluşturuldu.",
+        "createFailed": "Teslimat oluşturulamadı."
+      }
+    },
+    "edit": {
+      "toasts": {
+        "updateSuccess": "Teslimat güncellendi.",
+        "updateFailed": "Teslimat güncellenemedi.",
+        "deliveryNotFound": "Teslimat bulunamadı.",
+        "returnExceedsDelivered": "İade miktarı teslim edilen miktarı aşıyor.",
+        "kindChangeNotAllowed": "Belge türü değiştirilemez."
+      }
+    },
+    "delete": {
+      "dialogTitle": "Teslimatı Sil",
+      "dialogDescription": "{deliveryNumber} teslimatı silinsin mi?",
+      "buttons": {
+        "cancel": "İptal",
+        "confirm": "Sil"
+      },
+      "toasts": {
+        "deleteSuccess": "Teslimat silindi.",
+        "deleteFailed": "Teslimat silinemedi.",
+        "deliveryNotFound": "Teslimat bulunamadı."
+      }
+    },
+    "filters": {
+      "searchLabel": "Arama",
+      "searchPlaceholder": "Teslimat ara...",
+      "clearSearch": "Aramayı temizle",
+      "clearAll": "Tümünü temizle",
+      "columns": "Sütunlar",
+      "clearChip": "Filtreyi temizle"
+    },
+    "form": {
+      "titleCreate": "Yeni Sevk Ekle",
+      "titleEdit": "Sevki Düzenle",
+      "description": "Sevk bilgilerini doldurun ve kaydedin.",
+      "sections": {
+        "items": "Ürün Kalemleri"
+      },
+      "fields": {
+        "customer": "Müşteri",
+        "deliveryNumber": "İrsaliye No",
+        "kind": "Belge Tipi",
+        "notes": "Notlar",
+        "deliveryDate": "Sevk Tarihi",
+        "orderNumber": "Sipariş Numarası",
+        "productCode": "Ürün Kodu",
+        "productName": "Ürün Adı",
+        "unit": "Birim",
+        "stock": "Stok",
+        "price": "Fiyat",
+        "deliveredQuantity": "Sevk Adedi",
+        "total": "Tutar"
+      },
+      "placeholders": {
+        "deliveryNumber": "örn. NKA202600000001",
+        "notes": "İsteğe bağlı not",
+        "selectOrder": "Sipariş seç",
+        "selectProduct": "Ürün seç"
+      },
+      "kind": {
+        "delivery": "Sevkiyat",
+        "return": "İade"
+      },
+      "buttons": {
+        "cancel": "İptal",
+        "create": "Ekle",
+        "update": "Güncelle",
+        "creating": "Ekleniyor...",
+        "updating": "Güncelleniyor...",
+        "addItem": "Kalem Ekle"
+      },
+      "emptyItems": {
+        "title": "Henüz sevk maddesi eklenmedi",
+        "description": "Listeye ürün eklemek için aşağıdaki butonu kullanın"
+      },
+      "badges": {
+        "ordered": "sipariş",
+        "sent": "net sevk",
+        "remaining": "kalan"
+      },
+      "labels": {
+        "subtotal": "Toplam"
+      }
+    },
+    "empty": "Teslimat bulunamadı.",
+    "showing": "{from}-{to} arası, toplam {total} teslimat",
+    "rowsPerPage": "Satır",
+    "updating": "Güncelleniyor...",
+    "page": "Sayfa {current} / {total}",
+    "errors": {
+      "loadFailed": "Teslimatlar yüklenemedi."
+    },
+    "history": {
+      "title": "Teslimat Kalemleri ve Sevkiyat İlerlemesi",
+      "loadFailed": "Teslimat geçmişi yüklenemedi.",
+      "empty": "Teslimat kalemi bulunamadı.",
+      "none": "Sevkiyat geçmişi yok",
+      "qtySuffix": "adet",
+      "progress": "İlerleme",
+      "status": {
+        "missing": "{count} eksik",
+        "completed": "Tamamlandı"
+      },
+      "columns": {
+        "orderNumber": "Sipariş No",
+        "product": "Ürün",
+        "ordered": "Sipariş",
+        "totalDelivered": "Toplam Teslim",
+        "currentDelivery": "Bu Teslimat",
+        "status": "Durum",
+        "shipmentHistory": "Sevkiyat Geçmişi"
+      }
+    }
+  },
+  "ProductsDetail": {
+    "sections": {
+      "basic": "Temel Bilgiler",
+      "technical": "Teknik Bilgiler",
+      "lifecycle": "Yaşam Döngüsü",
+      "movements": "Stok Hareketleri"
+    },
+    "badges": {
+      "lowStock": "Düşük Stok",
+      "inStock": "Stokta"
+    },
+    "movements": {
+      "description": "Bu ürüne ait son stok hareketleri.",
+      "empty": "Henüz stok hareketi kaydı bulunmuyor.",
+      "viewAll": "Tüm hareketleri gör",
+      "reference": "Referans",
+      "by": "Oluşturan"
+    },
+    "fields": {
+      "id": "ID",
+      "code": "Kod",
+      "name": "Ad",
+      "customer": "Müşteri",
+      "unit": "Birim",
+      "price": "Fiyat",
+      "quantity": "Miktar",
+      "minStockLevel": "Minimum Stok",
+      "otherCodes": "Diğer Kodlar",
+      "material": "Malzeme",
+      "postProcess": "Son İşlem",
+      "coating": "Kaplama",
+      "specs": "Ölçü",
+      "specsNet": "Net Ölçü",
+      "notes": "Açıklamalar",
+      "createdAt": "Oluşturulma",
+      "updatedAt": "Güncellenme"
+    },
+    "emptyValue": "-"
+  },
+  "ReportPage": {
+    "stockIntegrity": {
+      "title": "Stok Tutarlılığı",
+      "description": "Önbellekteki ürün stoklarını, stok hareket defteriyle karşılaştırın ve uyumsuzlukları düzeltin.",
+      "summary": {
+        "count": "{count, plural, =0 {Uyumsuzluk yok} one {# uyumsuzluk} other {# uyumsuzluk}}"
+      },
+      "actions": {
+        "refresh": "Yenile",
+        "reconcile": "Uyumsuzlukları düzelt"
+      },
+      "table": {
+        "code": "Kod",
+        "name": "Ad",
+        "shelf": "Raf",
+        "ledger": "Defter",
+        "diff": "Fark"
+      },
+      "empty": "Stok uyumsuzluğu bulunamadı.",
+      "error": {
+        "title": "Stok tutarlılığı raporu yuklenemedi."
+      },
+      "accessDenied": {
+        "title": "Yonetici yetkisi gerekli",
+        "description": "Stok tutarlılığı sorunlarini yalnizca yoneticiler gorebilir ve duzeltebilir."
+      },
+      "dialog": {
+        "title": "Stok uyumsuzlukları düzeltilecek mi?",
+        "description": "{count, plural, one {Bu işlem defterle uyumsuz 1 ürünün stok miktarını güncelleyecek.} other {Bu işlem defterle uyumsuz # ürünün stok miktarını guncelleyecek.}}",
+        "cancel": "İptal",
+        "confirm": "Düzelt"
+      },
+      "toasts": {
+        "reconcileSuccess": "{count, plural, one {1 ürün düzeltildi.} other {# ürün düzeltildi.}}"
+      }
+    }
+  },
+  "validation": {
+    "required": "Bu alan zorunludur.",
+    "invalid": "Geçersiz değer.",
+    "insufficientStock": "Yetersiz stok."
+  }
+}
