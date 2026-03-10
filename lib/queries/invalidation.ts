@@ -137,12 +137,16 @@ async function invalidateQueryKeys(
   );
 }
 
+function isPositiveId(value: number | null | undefined): value is number {
+  return typeof value === "number" && value > 0;
+}
+
 function uniqueOrderIdsFromDeliveryDetail(detail: DeliveryDetail | null): Array<number> {
   if (!detail) {
     return [];
   }
 
-  return [...new Set(detail.items.map((item) => item.orderId).filter((orderId) => orderId > 0))];
+  return [...new Set(detail.items.map((item) => item.orderId).filter(isPositiveId))];
 }
 
 function uniqueProductIdsFromDeliveryDetail(detail: DeliveryDetail | null): Array<number> {
@@ -150,9 +154,7 @@ function uniqueProductIdsFromDeliveryDetail(detail: DeliveryDetail | null): Arra
     return [];
   }
 
-  return [
-    ...new Set(detail.items.map((item) => item.productId).filter((productId) => productId > 0)),
-  ];
+  return [...new Set(detail.items.map((item) => item.productId).filter(isPositiveId))];
 }
 
 function seedDeliveryDetailCache(

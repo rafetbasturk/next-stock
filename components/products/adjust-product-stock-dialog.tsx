@@ -74,6 +74,17 @@ function isEditableMovementType(type: string): type is EditableMovementType {
   return type === "IN" || type === "OUT" || type === "ADJUSTMENT";
 }
 
+function getUpdatedMovementType(
+  currentMovementType: EditableMovementType,
+  actionType: StockActionType,
+): EditableMovementType {
+  if (currentMovementType === "ADJUSTMENT") {
+    return "ADJUSTMENT";
+  }
+
+  return actionType === "OUT" ? "OUT" : "IN";
+}
+
 export function AdjustProductStockDialog({
   product,
   movement,
@@ -249,12 +260,16 @@ function AdjustProductStockDialogContent({
         }
 
         const signedQuantity = actionType === "OUT" ? -parsedQuantity : parsedQuantity;
+        const movementType = getUpdatedMovementType(
+          target.movement.movementType,
+          actionType,
+        );
         await updateMovementMutation.mutateAsync({
           id: target.movement.id,
           data: {
             quantity: signedQuantity,
             notes: notes.trim() || undefined,
-            movementType: actionType,
+            movementType,
           },
         });
       }
