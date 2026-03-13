@@ -11,6 +11,7 @@ const ERROR_HTTP_STATUS: Record<AppErrorCode, number> = {
   CUSTOMER_NOT_FOUND: 404,
   CUSTOMER_HAS_ACTIVE_ORDERS: 409,
   ORDER_NOT_FOUND: 404,
+  ORDER_ITEM_NOT_FOUND: 404,
   ORDER_HAS_DELIVERIES: 409,
   DELIVERY_NOT_FOUND: 404,
   RETURN_QUANTITY_EXCEEDS_DELIVERED: 409,
@@ -39,6 +40,7 @@ const ERROR_MESSAGES: Record<AppErrorCode, string> = {
   CUSTOMER_NOT_FOUND: "Customer not found.",
   CUSTOMER_HAS_ACTIVE_ORDERS: "Customer has active orders and cannot be deleted.",
   ORDER_NOT_FOUND: "Order not found.",
+  ORDER_ITEM_NOT_FOUND: "Order item not found.",
   ORDER_HAS_DELIVERIES: "Order has deliveries and cannot be modified.",
   DELIVERY_NOT_FOUND: "Delivery not found.",
   RETURN_QUANTITY_EXCEEDS_DELIVERED:

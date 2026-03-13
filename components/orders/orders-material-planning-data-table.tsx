@@ -35,6 +35,7 @@ import { useDataTablePaginationNavigation } from "@/hooks/use-data-table-paginat
 import { useDataTablePaginationState } from "@/hooks/use-data-table-pagination-state";
 import { useOrdersMaterialPlanningSearchNavigation } from "@/hooks/use-orders-material-planning-search-navigation";
 import { useProductDetail } from "@/lib/queries/product-detail";
+import { useMarkMaterialPlanningCompletedMutation } from "@/lib/queries/material-planning-mutations";
 import { toClientError } from "@/lib/errors/client-error";
 import type { MaterialPlanningTableRow } from "@/lib/types/orders";
 import type { ProductTableRow } from "@/lib/types/products";
@@ -67,7 +68,9 @@ export function OrdersMaterialPlanningDataTable({
 }: OrdersMaterialPlanningDataTableProps) {
   const t = useTranslations("MaterialPlanningTable");
   const navigate = useOrdersMaterialPlanningSearchNavigation(search);
+  const markPlannedMutation = useMarkMaterialPlanningCompletedMutation();
   const [editingProductId, setEditingProductId] = useState<number | null>(null);
+  const [planningProductId, setPlanningProductId] = useState<number | null>(null);
   const productDetailQuery = useProductDetail(editingProductId ?? 0, Boolean(editingProductId));
 
   useEffect(() => {
@@ -109,14 +112,47 @@ export function OrdersMaterialPlanningDataTable({
     setEditingProductId(productId);
   }, []);
 
+  const handleMarkPlanned = useCallback(
+    async (productId: number) => {
+      if (markPlannedMutation.isPending) {
+        return;
+      }
+
+      setPlanningProductId(productId);
+
+      try {
+        await markPlannedMutation.mutateAsync({ productId });
+        toast.success(t("actions.planSuccess"));
+      } catch (error) {
+        toast.error(toClientError(error).message);
+      } finally {
+        setPlanningProductId((current) => (current === productId ? null : current));
+      }
+    },
+    [markPlannedMutation, t],
+  );
+
   const columns = useMemo(
     () =>
       getMaterialPlanningColumns(t, {
+        onMarkPlanned: (productId) => {
+          void handleMarkPlanned(productId);
+        },
+        planningProductId,
+        isPlanLoading: markPlannedMutation.isPending,
         onEditProduct: handleEditProduct,
         editingProductId,
         isEditLoading: productDetailQuery.isFetching,
       }),
-    [editingProductId, handleEditProduct, productDetailQuery.isFetching, t],
+    [
+      editingProductId,
+      handleEditProduct,
+      handleMarkPlanned,
+      markPlannedMutation.isPending,
+      planningProductId,
+      productDetailQuery.isFetching,
+      t,
+    ],
   );
 
   // eslint-disable-next-line react-hooks/incompatible-library
@@ -254,6 +290,20 @@ export function OrdersMaterialPlanningDataTable({
                       <DataTableActionsMenu
                         srLabel={t("actions.openMenu")}
                         items={[
+                          {
+                            key: "mark-planned",
+                            label:
+                              markPlannedMutation.isPending &&
+                              planningProductId === row.productId
+                                ? t("actions.markingPlanned")
+                                : t("actions.markPlanned"),
+                            disabled:
+                              markPlannedMutation.isPending &&
+                              planningProductId === row.productId,
+                            onSelect: () => {
+                              void handleMarkPlanned(row.productId);
+                            },
+                          },
                           {
                             key: "edit-product",
                             label:

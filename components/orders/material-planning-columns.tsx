@@ -6,6 +6,9 @@ import type { MaterialPlanningTableRow } from "@/lib/types/orders";
 export function getMaterialPlanningColumns(
   t: (key: string) => string,
   options?: {
+    onMarkPlanned?: (productId: number) => void;
+    planningProductId?: number | null;
+    isPlanLoading?: boolean;
     onEditProduct?: (productId: number) => void;
     editingProductId?: number | null;
     isEditLoading?: boolean;
@@ -100,6 +103,18 @@ export function getMaterialPlanningColumns(
           <DataTableActionsMenu
             srLabel={t("actions.openMenu")}
             items={[
+              {
+                key: "mark-planned",
+                label:
+                  options?.isPlanLoading &&
+                  options.planningProductId === row.original.productId
+                    ? t("actions.markingPlanned")
+                    : t("actions.markPlanned"),
+                disabled:
+                  options?.isPlanLoading &&
+                  options.planningProductId === row.original.productId,
+                onSelect: () => options?.onMarkPlanned?.(row.original.productId),
+              },
               {
                 key: "edit-product",
                 label:

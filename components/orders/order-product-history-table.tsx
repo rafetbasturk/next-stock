@@ -1,9 +1,12 @@
 "use client";
 
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import { CheckCircle, Clock } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+import { toast } from "sonner";
 
+import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -15,6 +18,8 @@ import {
 } from "@/components/ui/table";
 import { convertToCurrencyFormat } from "@/lib/currency";
 import { formatDateTime } from "@/lib/datetime";
+import { toClientError } from "@/lib/errors/client-error";
+import { useUndoMaterialPlanningCompletedMutation } from "@/lib/queries/material-planning-mutations";
 import { useOrderHistory } from "@/lib/queries/order-history";
 import { getClientTimeZone } from "@/lib/timezone-client";
 import { cn } from "@/lib/utils";
@@ -29,7 +34,34 @@ export function OrderProductHistoryTable({
   const t = useTranslations("OrdersTable.history");
   const locale = useLocale();
   const timeZone = getClientTimeZone();
+  const undoMaterialPlanningMutation =
+    useUndoMaterialPlanningCompletedMutation();
+  const [undoingOrderItemId, setUndoingOrderItemId] = useState<number | null>(
+    null,
+  );
   const { data, isPending, isError } = useOrderHistory(orderId, true);
+
+  const handleUndoMaterialPlanning = useCallback(
+    async (orderItemId: number) => {
+      if (undoMaterialPlanningMutation.isPending) {
+        return;
+      }
+
+      setUndoingOrderItemId(orderItemId);
+
+      try {
+        await undoMaterialPlanningMutation.mutateAsync({ orderItemId });
+        toast.success(t("materialPlanning.undoSuccess"));
+      } catch (error) {
+        toast.error(toClientError(error).message);
+      } finally {
+        setUndoingOrderItemId((current) =>
+          current === orderItemId ? null : current,
+        );
+      }
+    },
+    [t, undoMaterialPlanningMutation],
+  );
 
   if (isPending) {
     return (
@@ -65,11 +97,14 @@ export function OrderProductHistoryTable({
 
     return {
       id: `${item.itemType}-${item.id}`,
+      orderItemId: item.id,
+      itemType: item.itemType,
       productId: item.productId,
       productCode: item.productCode,
       productName: item.productName,
       unitPrice: item.unitPrice,
       currency: item.currency,
+      stockQuantity: item.stockQuantity,
       formattedPrice: convertToCurrencyFormat({
         cents: item.unitPrice,
         currency: item.currency,
@@ -79,6 +114,9 @@ export function OrderProductHistoryTable({
       delivered,
       remaining,
       progress,
+      materialPlannedAt: item.materialPlannedAt,
+      materialPlannedBy: item.materialPlannedBy,
+      canUndoMaterialPlanning: item.canUndoMaterialPlanning,
       pastDeliveries,
       signedQty,
     };
@@ -104,6 +142,9 @@ export function OrderProductHistoryTable({
               <TableHead className="min-w-45">{t("columns.product")}</TableHead>
               <TableHead className="min-w-27.5 text-right">
                 {t("columns.price")}
+              </TableHead>
+              <TableHead className="min-w-20 text-center">
+                {t("columns.stock")}
               </TableHead>
               <TableHead className="min-w-17.5 text-center">
                 {t("columns.ordered")}
@@ -175,36 +216,75 @@ export function OrderProductHistoryTable({
                 </TableCell>
 
                 <TableCell>
-                  {item.productId ? (
-                    <Link
-                      href={`/products/${item.productId}`}
-                      className="block rounded-sm underline-offset-2 transition-colors hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                    >
-                      <div className="text-foreground font-medium">
-                        {item.productCode}
-                      </div>
-                      {item.productName ? (
-                        <div className="text-muted-foreground text-xs">
-                          {item.productName}
+                  <div>
+                    {item.productId ? (
+                      <Link
+                        href={`/products/${item.productId}`}
+                        className="block rounded-sm underline-offset-2 transition-colors hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                      >
+                        <div className="text-foreground font-medium">
+                          {item.productCode}
                         </div>
-                      ) : null}
-                    </Link>
-                  ) : (
-                    <>
-                      <div className="text-foreground font-medium">
-                        {item.productCode}
-                      </div>
-                      {item.productName ? (
-                        <div className="text-muted-foreground text-xs">
-                          {item.productName}
+                        {item.productName ? (
+                          <div className="text-muted-foreground text-xs">
+                            {item.productName}
+                          </div>
+                        ) : null}
+                      </Link>
+                    ) : (
+                      <>
+                        <div className="text-foreground font-medium">
+                          {item.productCode}
                         </div>
-                      ) : null}
-                    </>
-                  )}
+                        {item.productName ? (
+                          <div className="text-muted-foreground text-xs">
+                            {item.productName}
+                          </div>
+                        ) : null}
+                      </>
+                    )}
+                    {item.itemType === "standard" ? (
+                      <div className="mt-1 space-y-1">
+                        <div className="text-muted-foreground text-[11px]">
+                          {item.materialPlannedAt
+                            ? item.materialPlannedBy
+                              ? t("materialPlanning.plannedBy", {
+                                  user: item.materialPlannedBy,
+                                })
+                              : t("materialPlanning.planned")
+                            : t("materialPlanning.notPlanned")}
+                        </div>
+                        {item.canUndoMaterialPlanning ? (
+                          <Button
+                            type="button"
+                            variant="link"
+                            size="sm"
+                            className="h-auto px-0 text-xs"
+                            disabled={
+                              undoMaterialPlanningMutation.isPending &&
+                              undoingOrderItemId === item.orderItemId
+                            }
+                            onClick={() => {
+                              void handleUndoMaterialPlanning(item.orderItemId);
+                            }}
+                          >
+                            {undoMaterialPlanningMutation.isPending &&
+                            undoingOrderItemId === item.orderItemId
+                              ? t("materialPlanning.undoLoading")
+                              : t("materialPlanning.undo")}
+                          </Button>
+                        ) : null}
+                      </div>
+                    ) : null}
+                  </div>
                 </TableCell>
 
                 <TableCell className="text-right font-medium">
                   {item.formattedPrice}
+                </TableCell>
+
+                <TableCell className="text-center font-medium">
+                  {item.stockQuantity ?? "-"}
                 </TableCell>
 
                 <TableCell className="text-foreground text-center">
@@ -281,7 +361,7 @@ export function OrderProductHistoryTable({
             {!preparedItems.length ? (
               <TableRow>
                 <TableCell
-                  colSpan={7}
+                  colSpan={8}
                   className="text-muted-foreground py-8 text-center"
                 >
                   {t("empty")}
@@ -329,6 +409,39 @@ export function OrderProductHistoryTable({
                     ) : null}
                   </>
                 )}
+                {item.itemType === "standard" ? (
+                  <div className="mt-1 space-y-1">
+                    <p className="text-muted-foreground text-[11px]">
+                      {item.materialPlannedAt
+                        ? item.materialPlannedBy
+                          ? t("materialPlanning.plannedBy", {
+                              user: item.materialPlannedBy,
+                            })
+                          : t("materialPlanning.planned")
+                        : t("materialPlanning.notPlanned")}
+                    </p>
+                    {item.canUndoMaterialPlanning ? (
+                      <Button
+                        type="button"
+                        variant="link"
+                        size="sm"
+                        className="h-auto px-0 text-xs"
+                        disabled={
+                          undoMaterialPlanningMutation.isPending &&
+                          undoingOrderItemId === item.orderItemId
+                        }
+                        onClick={() => {
+                          void handleUndoMaterialPlanning(item.orderItemId);
+                        }}
+                      >
+                        {undoMaterialPlanningMutation.isPending &&
+                        undoingOrderItemId === item.orderItemId
+                          ? t("materialPlanning.undoLoading")
+                          : t("materialPlanning.undo")}
+                      </Button>
+                    ) : null}
+                  </div>
+                ) : null}
               </div>
 
               <span
@@ -377,13 +490,21 @@ export function OrderProductHistoryTable({
               </div>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
+            <div className="grid grid-cols-2 gap-2 text-center sm:grid-cols-5">
               <div className="rounded-md border bg-muted/20 py-1.5">
                 <p className="text-muted-foreground text-[11px]">
                   {t("columns.price")}
                 </p>
                 <p className="text-foreground text-sm font-semibold">
                   {item.formattedPrice}
+                </p>
+              </div>
+              <div className="rounded-md border bg-muted/20 py-1.5">
+                <p className="text-muted-foreground text-[11px]">
+                  {t("columns.stock")}
+                </p>
+                <p className="text-foreground text-sm font-semibold">
+                  {item.stockQuantity ?? "-"}
                 </p>
               </div>
               <div className="rounded-md border bg-muted/20 py-1.5">

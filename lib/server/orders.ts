@@ -23,6 +23,7 @@ import {
   orderItems,
   orders,
   products,
+  users,
 } from "@/db/schema";
 import { getCurrentUser } from "@/lib/auth";
 import { AppError } from "@/lib/errors/app-error";
@@ -56,12 +57,15 @@ import {
   ordersSearchSchema,
 } from "@/lib/types/search";
 import type {
+  MaterialPlanningMutationResponse,
   MaterialPlanningTableRow,
   OrderDetail,
   OrderTableRow,
   OrderTrackingTableRow,
 } from "@/lib/types/orders";
 import {
+  parseMaterialPlanningPlanBody,
+  parseMaterialPlanningUnplanBody,
   parseOrderMutationInput,
   parseOrderRequestedStatus,
   type OrderMutationInput,
@@ -115,6 +119,10 @@ const orderTrackingOpenStatusSet = new Set<OrderStatus>(
 );
 const stockResponsiveOrderStatusValues = [
   "ÜRETİM",
+  "KISMEN HAZIR",
+] as const satisfies ReadonlyArray<OrderStatus>;
+const materialPlanningStatusValues = [
+  "KAYIT",
   "KISMEN HAZIR",
 ] as const satisfies ReadonlyArray<OrderStatus>;
 
@@ -188,7 +196,11 @@ type OrderHistoryItem = {
   productName: string | null;
   unitPrice: number;
   currency: Currency;
+  stockQuantity: number | null;
   quantity: number;
+  materialPlannedAt: string | null;
+  materialPlannedBy: string | null;
+  canUndoMaterialPlanning: boolean;
   deliveries: Array<OrderHistoryDelivery>;
 };
 
@@ -227,6 +239,158 @@ function resolveStatusFromProductStock(
   if (allEnough) return "HAZIR";
   if (!anyAvailable) return "KAYIT";
   return "KISMEN HAZIR";
+}
+
+function createStandardRemainingQuantityExpr(
+  standardDeliveredByItemId: ReturnType<typeof createStandardDeliveredByItemIdSubquery>,
+) {
+  return sql<number>`
+    greatest(
+      ${orderItems.quantity} - coalesce(${standardDeliveredByItemId.netDelivered}, 0),
+      0
+    )::int
+  `;
+}
+
+function clearMaterialPlanningAutoPromotionFields() {
+  return {
+    materialPlanningAutoPromotedAt: null,
+    materialPlanningAutoPromotedBy: null,
+  };
+}
+
+type RemainingStandardOrderItemRow = {
+  orderId: number;
+  itemId: number;
+  materialPlannedAt: string | null;
+};
+
+async function getRemainingStandardOrderItemsTx(
+  tx: DbTransaction,
+  orderIds: ReadonlyArray<number>,
+): Promise<Array<RemainingStandardOrderItemRow>> {
+  const normalizedOrderIds = [...new Set(orderIds)].filter(
+    (orderId) => Number.isInteger(orderId) && orderId > 0,
+  );
+
+  if (normalizedOrderIds.length === 0) {
+    return [];
+  }
+
+  const standardDeliveredByItemId = createStandardDeliveredByItemIdSubquery();
+  const remainingQuantityExpr = createStandardRemainingQuantityExpr(
+    standardDeliveredByItemId,
+  );
+
+  return tx
+    .select({
+      orderId: orderItems.orderId,
+      itemId: orderItems.id,
+      materialPlannedAt: orderItems.materialPlannedAt,
+    })
+    .from(orderItems)
+    .innerJoin(orders, eq(orders.id, orderItems.orderId))
+    .leftJoin(
+      standardDeliveredByItemId,
+      eq(standardDeliveredByItemId.itemId, orderItems.id),
+    )
+    .where(
+      and(
+        inArray(orderItems.orderId, normalizedOrderIds),
+        notDeleted(orderItems),
+        notDeleted(orders),
+        sql`${remainingQuantityExpr} > 0`,
+      ),
+    );
+}
+
+function getFullyMaterialPlannedOrderIds(
+  rows: ReadonlyArray<RemainingStandardOrderItemRow>,
+) {
+  const progressByOrderId = new Map<
+    number,
+    { hasRemainingItems: boolean; allPlanned: boolean }
+  >();
+
+  for (const row of rows) {
+    const current = progressByOrderId.get(row.orderId) ?? {
+      hasRemainingItems: false,
+      allPlanned: true,
+    };
+
+    current.hasRemainingItems = true;
+    if (!row.materialPlannedAt) {
+      current.allPlanned = false;
+    }
+
+    progressByOrderId.set(row.orderId, current);
+  }
+
+  return new Set(
+    [...progressByOrderId.entries()]
+      .filter(([, value]) => value.hasRemainingItems && value.allPlanned)
+      .map(([orderId]) => orderId),
+  );
+}
+
+async function syncMaterialPlanningStatusesForOrdersTx(
+  tx: DbTransaction,
+  orderIds: ReadonlyArray<number>,
+  userId: number,
+) {
+  const normalizedOrderIds = [...new Set(orderIds)].filter(
+    (orderId) => Number.isInteger(orderId) && orderId > 0,
+  );
+
+  if (normalizedOrderIds.length === 0) {
+    return;
+  }
+
+  const [orderRows, remainingRows] = await Promise.all([
+    tx
+      .select({
+        id: orders.id,
+        status: orders.status,
+        materialPlanningAutoPromotedAt: orders.materialPlanningAutoPromotedAt,
+      })
+      .from(orders)
+      .where(and(inArray(orders.id, normalizedOrderIds), notDeleted(orders))),
+    getRemainingStandardOrderItemsTx(tx, normalizedOrderIds),
+  ]);
+
+  const fullyPlannedOrderIds = getFullyMaterialPlannedOrderIds(remainingRows);
+
+  for (const order of orderRows) {
+    const isFullyPlanned = fullyPlannedOrderIds.has(order.id);
+
+    if (order.status === "KAYIT" && isFullyPlanned) {
+      await tx
+        .update(orders)
+        .set({
+          status: "ÜRETİM",
+          materialPlanningAutoPromotedAt: sql`now()`,
+          materialPlanningAutoPromotedBy: userId,
+          updatedAt: sql`now()`,
+        })
+        .where(eq(orders.id, order.id));
+      continue;
+    }
+
+    if (
+      order.status === "ÜRETİM" &&
+      order.materialPlanningAutoPromotedAt &&
+      !isFullyPlanned
+    ) {
+      await tx
+        .update(orders)
+        .set({
+          status: "KAYIT",
+          ...clearMaterialPlanningAutoPromotionFields(),
+          updatedAt: sql`now()`,
+        })
+        .where(eq(orders.id, order.id));
+    }
+  }
 }
 
 export async function syncReadyStatusesForProductsTx(
@@ -321,6 +485,7 @@ export async function syncReadyStatusesForProductsTx(
         .update(orders)
         .set({
           status: nextStatus,
+          ...clearMaterialPlanningAutoPromotionFields(),
           updatedAt: sql`now()`,
         })
         .where(eq(orders.id, orderId));
@@ -872,15 +1037,18 @@ export async function getMaterialPlanningRows(
     sortBy = "purchase_quantity",
     sortDir = "desc",
   } = parsed;
-  const materialPlanningStatuses = parseStatuses(materialPlanningDefaultStatus);
   const conditions: Array<SQL> = [
     notDeleted(orderItems),
     notDeleted(orders),
     notDeleted(products),
-    inArray(orders.status, materialPlanningStatuses),
+    inArray(orders.status, materialPlanningStatusValues),
+    sql`${orderItems.materialPlannedAt} is null`,
   ];
 
   const standardDeliveredByItemId = createStandardDeliveredByItemIdSubquery();
+  const remainingQuantityExpr = createStandardRemainingQuantityExpr(
+    standardDeliveredByItemId,
+  );
 
   const sourceRows: Array<MaterialPlanningSourceRow> = await db
     .select({
@@ -890,12 +1058,7 @@ export async function getMaterialPlanningRows(
         coalesce(${products.name}, ${products.code}, '')
       `,
       stockQuantity: products.stockQuantity,
-      remainingQuantity: sql<number>`
-        greatest(
-          ${orderItems.quantity} - coalesce(${standardDeliveredByItemId.netDelivered}, 0),
-          0
-        )::int
-      `,
+      remainingQuantity: remainingQuantityExpr,
       material: products.material,
       specs: products.specs,
     })
@@ -906,7 +1069,12 @@ export async function getMaterialPlanningRows(
       standardDeliveredByItemId,
       eq(standardDeliveredByItemId.itemId, orderItems.id),
     )
-    .where(conditions.length === 1 ? conditions[0] : and(...conditions)!);
+    .where(
+      and(
+        conditions.length === 1 ? conditions[0] : and(...conditions)!,
+        sql`${remainingQuantityExpr} > 0`,
+      ),
+    );
 
   return aggregateMaterialPlanningRows(sourceRows).sort(
     createMaterialPlanningRowComparator(sortBy, sortDir),
@@ -1491,6 +1659,9 @@ export async function updateOrder({
       .update(orders)
       .set({
         status: requestedStatus,
+        ...(requestedStatus === "ÜRETİM"
+          ? {}
+          : clearMaterialPlanningAutoPromotionFields()),
         updatedAt: sql`now()`,
       })
       .where(and(eq(orders.id, id), notDeleted(orders)))
@@ -1536,6 +1707,7 @@ export async function updateOrder({
   }
 
   const updatedOrder = await db.transaction(async (tx) => {
+    const nextStatus = input.status ?? "KAYIT";
     const [order] = await tx
       .update(orders)
       .set({
@@ -1543,10 +1715,13 @@ export async function updateOrder({
         orderNumber: input.orderNumber!.trim(),
         orderDate: input.orderDate!,
         customerId: input.customerId!,
-        status: input.status ?? "KAYIT",
+        status: nextStatus,
         currency: safeCurrency,
         deliveryAddress: input.deliveryAddress ?? null,
         notes: input.notes ?? null,
+        ...(nextStatus === "ÜRETİM"
+          ? {}
+          : clearMaterialPlanningAutoPromotionFields()),
         updatedAt: sql`now()`,
       })
       .where(and(eq(orders.id, id), notDeleted(orders)))
@@ -1598,6 +1773,122 @@ export async function updateOrder({
   });
 
   return updatedOrder;
+}
+
+export async function markMaterialPlanningCompleted({
+  data,
+}: ServerFnPayload<unknown>): Promise<MaterialPlanningMutationResponse> {
+  const user = await requireAuth();
+  const input = parseMaterialPlanningPlanBody(data);
+
+  return db.transaction(async (tx) => {
+    const standardDeliveredByItemId = createStandardDeliveredByItemIdSubquery();
+    const remainingQuantityExpr = createStandardRemainingQuantityExpr(
+      standardDeliveredByItemId,
+    );
+
+    const candidateItems = await tx
+      .select({
+        orderId: orderItems.orderId,
+        itemId: orderItems.id,
+      })
+      .from(orderItems)
+      .innerJoin(orders, eq(orders.id, orderItems.orderId))
+      .leftJoin(
+        standardDeliveredByItemId,
+        eq(standardDeliveredByItemId.itemId, orderItems.id),
+      )
+      .where(
+        and(
+          eq(orderItems.productId, input.productId),
+          inArray(orders.status, materialPlanningStatusValues),
+          notDeleted(orderItems),
+          notDeleted(orders),
+          sql`${orderItems.materialPlannedAt} is null`,
+          sql`${remainingQuantityExpr} > 0`,
+        ),
+      );
+
+    const itemIds = candidateItems.map((item) => item.itemId);
+    const orderIds = [...new Set(candidateItems.map((item) => item.orderId))];
+
+    if (itemIds.length === 0) {
+      return {
+        success: true,
+        orderIds: [],
+      };
+    }
+
+    await tx
+      .update(orderItems)
+      .set({
+        materialPlannedAt: sql`now()`,
+        materialPlannedBy: user.id,
+        updatedAt: sql`now()`,
+      })
+      .where(inArray(orderItems.id, itemIds));
+
+    await syncMaterialPlanningStatusesForOrdersTx(tx, orderIds, user.id);
+
+    return {
+      success: true,
+      orderIds,
+    };
+  });
+}
+
+export async function undoMaterialPlanningCompleted({
+  data,
+}: ServerFnPayload<unknown>): Promise<MaterialPlanningMutationResponse> {
+  const user = await requireAuth();
+  const input = parseMaterialPlanningUnplanBody(data);
+
+  return db.transaction(async (tx) => {
+    const standardDeliveredByItemId = createStandardDeliveredByItemIdSubquery();
+    const remainingQuantityExpr = createStandardRemainingQuantityExpr(
+      standardDeliveredByItemId,
+    );
+
+    const [targetItem] = await tx
+      .select({
+        orderId: orderItems.orderId,
+        itemId: orderItems.id,
+        materialPlannedAt: orderItems.materialPlannedAt,
+        remainingQuantity: remainingQuantityExpr,
+      })
+      .from(orderItems)
+      .innerJoin(orders, eq(orders.id, orderItems.orderId))
+      .leftJoin(
+        standardDeliveredByItemId,
+        eq(standardDeliveredByItemId.itemId, orderItems.id),
+      )
+      .where(and(eq(orderItems.id, input.orderItemId), notDeleted(orderItems), notDeleted(orders)))
+      .limit(1);
+
+    if (!targetItem) {
+      throw new AppError("ORDER_ITEM_NOT_FOUND");
+    }
+
+    if (!targetItem.materialPlannedAt || targetItem.remainingQuantity <= 0) {
+      throw new AppError("VALIDATION_ERROR", "Material planning cannot be undone.");
+    }
+
+    await tx
+      .update(orderItems)
+      .set({
+        materialPlannedAt: null,
+        materialPlannedBy: null,
+        updatedAt: sql`now()`,
+      })
+      .where(eq(orderItems.id, targetItem.itemId));
+
+    await syncMaterialPlanningStatusesForOrdersTx(tx, [targetItem.orderId], user.id);
+
+    return {
+      success: true,
+      orderIds: [targetItem.orderId],
+    };
+  });
 }
 
 export async function removeOrder({
@@ -1665,6 +1956,11 @@ export async function getOrderHistory({
     return { items: [] };
   }
 
+  const standardDeliveredByItemId = createStandardDeliveredByItemIdSubquery();
+  const remainingQuantityExpr = createStandardRemainingQuantityExpr(
+    standardDeliveredByItemId,
+  );
+
   const [standardItems, customItems, standardDeliveries, customDeliveries] =
     await Promise.all([
       db
@@ -1674,11 +1970,27 @@ export async function getOrderHistory({
           quantity: orderItems.quantity,
           unitPrice: orderItems.unitPrice,
           currency: orderItems.currency,
+          stockQuantity: products.stockQuantity,
           productName: products.name,
           productCode: products.code,
+          materialPlannedAt: orderItems.materialPlannedAt,
+          materialPlannedBy: users.username,
+          canUndoMaterialPlanning: sql<boolean>`
+            case
+              when ${orderItems.materialPlannedAt} is not null
+                and ${remainingQuantityExpr} > 0
+              then true
+              else false
+            end
+          `,
         })
         .from(orderItems)
         .innerJoin(products, eq(products.id, orderItems.productId))
+        .leftJoin(users, eq(users.id, orderItems.materialPlannedBy))
+        .leftJoin(
+          standardDeliveredByItemId,
+          eq(standardDeliveredByItemId.itemId, orderItems.id),
+        )
         .where(and(eq(orderItems.orderId, id), notDeleted(orderItems))),
       db
         .select({
@@ -1686,8 +1998,12 @@ export async function getOrderHistory({
           quantity: customOrderItems.quantity,
           unitPrice: customOrderItems.unitPrice,
           currency: customOrderItems.currency,
+          stockQuantity: sql<number | null>`null`,
           productCode: customOrderItems.name,
           productName: customOrderItems.notes,
+          materialPlannedAt: sql<string | null>`null`,
+          materialPlannedBy: sql<string | null>`null`,
+          canUndoMaterialPlanning: sql<boolean>`false`,
         })
         .from(customOrderItems)
         .where(
@@ -1781,7 +2097,11 @@ export async function getOrderHistory({
       productName: item.productName,
       unitPrice: item.unitPrice,
       currency: item.currency,
+      stockQuantity: item.stockQuantity,
       quantity: item.quantity,
+      materialPlannedAt: item.materialPlannedAt,
+      materialPlannedBy: item.materialPlannedBy,
+      canUndoMaterialPlanning: item.canUndoMaterialPlanning,
       deliveries:
         standardDeliveriesByItemId
           .get(item.id)
@@ -1795,7 +2115,11 @@ export async function getOrderHistory({
       productName: item.productName,
       unitPrice: item.unitPrice,
       currency: item.currency,
+      stockQuantity: item.stockQuantity,
       quantity: item.quantity,
+      materialPlannedAt: item.materialPlannedAt,
+      materialPlannedBy: item.materialPlannedBy,
+      canUndoMaterialPlanning: item.canUndoMaterialPlanning,
       deliveries:
         customDeliveriesByItemId
           .get(item.id)

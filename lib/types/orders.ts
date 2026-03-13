@@ -109,3 +109,8 @@ export type OrderMutationResponse = {
   notes: string | null;
   updatedAt: string;
 };
+
+export type MaterialPlanningMutationResponse = {
+  success: true;
+  orderIds: Array<number>;
+};

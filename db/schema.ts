@@ -100,6 +100,11 @@ export const orderItems = pgTable(
     quantity: integer().default(1).notNull(),
     unitPrice: integer("unit_price").notNull(),
     currency: currency().default("TRY").notNull(),
+    materialPlannedAt: timestamp("material_planned_at", {
+      withTimezone: true,
+      mode: "string",
+    }),
+    materialPlannedBy: integer("material_planned_by"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .defaultNow()
       .notNull(),
@@ -127,6 +132,14 @@ export const orderItems = pgTable(
       table.orderId.asc().nullsLast().op("int4_ops"),
       table.productId.asc().nullsLast().op("int4_ops"),
     ),
+    index("idx_order_items_material_planned_at").using(
+      "btree",
+      table.materialPlannedAt.asc().nullsLast().op("timestamptz_ops"),
+    ),
+    index("idx_order_items_material_planned_by").using(
+      "btree",
+      table.materialPlannedBy.asc().nullsLast().op("int4_ops"),
+    ),
     index("idx_order_items_product_id").using(
       "btree",
       table.productId.asc().nullsLast().op("int4_ops"),
@@ -140,6 +153,11 @@ export const orderItems = pgTable(
       columns: [table.productId],
       foreignColumns: [products.id],
       name: "order_items_product_id_products_id_fk",
+    }),
+    foreignKey({
+      columns: [table.materialPlannedBy],
+      foreignColumns: [users.id],
+      name: "order_items_material_planned_by_users_id_fk",
     }),
     check("order_items_quantity_positive", sql`quantity > 0`),
     check("order_items_unit_price_not_negative", sql`unit_price >= 0`),
@@ -262,6 +280,16 @@ export const orders = pgTable(
     status: status().default("KAYIT").notNull(),
     currency: currency().default("TRY"),
     notes: text(),
+    materialPlanningAutoPromotedAt: timestamp(
+      "material_planning_auto_promoted_at",
+      {
+        withTimezone: true,
+        mode: "string",
+      },
+    ),
+    materialPlanningAutoPromotedBy: integer(
+      "material_planning_auto_promoted_by",
+    ),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "string" })
       .defaultNow()
       .notNull(),
@@ -302,6 +330,14 @@ export const orders = pgTable(
       "btree",
       table.orderDate.asc().nullsLast().op("timestamptz_ops"),
     ),
+    index("idx_orders_material_planning_auto_promoted_at").using(
+      "btree",
+      table.materialPlanningAutoPromotedAt.asc().nullsLast().op("timestamptz_ops"),
+    ),
+    index("idx_orders_material_planning_auto_promoted_by").using(
+      "btree",
+      table.materialPlanningAutoPromotedBy.asc().nullsLast().op("int4_ops"),
+    ),
     index("idx_orders_order_number").using(
       "btree",
       table.orderNumber.asc().nullsLast().op("text_ops"),
@@ -317,6 +353,11 @@ export const orders = pgTable(
       columns: [table.customerId],
       foreignColumns: [customers.id],
       name: "orders_customer_id_customers_id_fk",
+    }),
+    foreignKey({
+      columns: [table.materialPlanningAutoPromotedBy],
+      foreignColumns: [users.id],
+      name: "orders_material_planning_auto_promoted_by_users_id_fk",
     }),
   ],
 );

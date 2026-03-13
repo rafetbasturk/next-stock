@@ -325,6 +325,14 @@ const orderStatusSchema = z.preprocess((value) => {
   return isOrderStatus(trimmed) ? trimmed : undefined;
 }, z.enum(statusArray).optional());
 
+const materialPlanningPlanBodySchema = z.object({
+  productId: optionalPositiveIntSchema,
+});
+
+const materialPlanningUnplanBodySchema = z.object({
+  orderItemId: optionalPositiveIntSchema,
+});
+
 const orderMutationSchema = z.object({
   isCustomOrder: z.coerce.boolean(),
   orderNumber: optionalTrimmedStringSchema,
@@ -388,6 +396,44 @@ export function parseOrderMutationInput(raw: unknown): OrderMutationInput {
 export function parseOrderRequestedStatus(raw: unknown): OrderStatus | undefined {
   const source = toObjectRecord(raw);
   return parseOrThrowValidationError(orderStatusSchema, source.status);
+}
+
+export type MaterialPlanningPlanBody = {
+  productId: number;
+};
+
+export function parseMaterialPlanningPlanBody(
+  raw: unknown,
+): MaterialPlanningPlanBody {
+  const parsed = parseOrThrowValidationError(
+    materialPlanningPlanBodySchema,
+    toObjectRecord(raw),
+  );
+
+  if (!parsed.productId) {
+    throw new AppError("VALIDATION_ERROR", "Invalid request payload.");
+  }
+
+  return { productId: parsed.productId };
+}
+
+export type MaterialPlanningUnplanBody = {
+  orderItemId: number;
+};
+
+export function parseMaterialPlanningUnplanBody(
+  raw: unknown,
+): MaterialPlanningUnplanBody {
+  const parsed = parseOrThrowValidationError(
+    materialPlanningUnplanBodySchema,
+    toObjectRecord(raw),
+  );
+
+  if (!parsed.orderItemId) {
+    throw new AppError("VALIDATION_ERROR", "Invalid request payload.");
+  }
+
+  return { orderItemId: parsed.orderItemId };
 }
 
 const deliveryItemSchema = z.object({

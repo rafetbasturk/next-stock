@@ -21,7 +21,11 @@ export type OrderHistoryItem = {
   productName: string | null;
   unitPrice: number;
   currency: Currency;
+  stockQuantity: number | null;
   quantity: number;
+  materialPlannedAt: string | null;
+  materialPlannedBy: string | null;
+  canUndoMaterialPlanning: boolean;
   deliveries: Array<OrderHistoryItemDelivery>;
 };
 

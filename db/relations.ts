@@ -16,6 +16,10 @@ export const ordersRelations = relations(orders, ({one, many}) => ({
 		fields: [orders.customerId],
 		references: [customers.id]
 	}),
+	materialPlanningAutoPromotedByUser: one(users, {
+		fields: [orders.materialPlanningAutoPromotedBy],
+		references: [users.id]
+	}),
 }));
 
 export const orderItemsRelations = relations(orderItems, ({one, many}) => ({
@@ -26,6 +30,10 @@ export const orderItemsRelations = relations(orderItems, ({one, many}) => ({
 	product: one(products, {
 		fields: [orderItems.productId],
 		references: [products.id]
+	}),
+	materialPlannedByUser: one(users, {
+		fields: [orderItems.materialPlannedBy],
+		references: [users.id]
 	}),
 	deliveryItems: many(deliveryItems),
 }));
@@ -77,6 +85,8 @@ export const sessionsRelations = relations(sessions, ({one}) => ({
 
 export const usersRelations = relations(users, ({many}) => ({
 	sessions: many(sessions),
+	orderItems: many(orderItems),
+	orders: many(orders),
 	stockMovements: many(stockMovements),
 }));
 

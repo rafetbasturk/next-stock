@@ -589,10 +589,19 @@
         "missing": "{count} missing",
         "completed": "Completed"
       },
+      "materialPlanning": {
+        "planned": "Material planned",
+        "plannedBy": "Material planned by {user}",
+        "notPlanned": "Material not planned",
+        "undo": "Undo material planning",
+        "undoLoading": "Undoing...",
+        "undoSuccess": "Material planning reverted."
+      },
       "columns": {
         "status": "Status",
         "product": "Product",
         "price": "Price",
+        "stock": "Stock",
         "progress": "Progress",
         "ordered": "Ordered",
         "delivered": "Delivered",
@@ -660,6 +669,9 @@
     "actions": {
       "openRoute": "Material Planning",
       "export": "Export Excel",
+      "markPlanned": "Mark Material Planned",
+      "markingPlanned": "Marking...",
+      "planSuccess": "Material planning marked.",
       "editProduct": "Edit Product",
       "loadingProduct": "Loading product...",
       "openMenu": "Open actions"

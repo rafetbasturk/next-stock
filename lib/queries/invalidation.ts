@@ -40,6 +40,14 @@ const MATERIAL_PLANNING_QUERY_KEYS = [
   ordersMaterialPlanningPaginatedQueryKeys.all,
 ] as const satisfies ReadonlyArray<QueryKey>;
 
+const MATERIAL_PLANNING_MUTATION_QUERY_KEYS = [
+  ordersPaginatedQueryKeys.all,
+  orderFilterOptionsQueryKeys.all,
+  yearRangeQueryKeys.all,
+  ...ORDER_TRACKING_QUERY_KEYS,
+  ...MATERIAL_PLANNING_QUERY_KEYS,
+] as const satisfies ReadonlyArray<QueryKey>;
+
 const ORDER_MUTATION_SHARED_QUERY_KEYS = [
   ordersPaginatedQueryKeys.all,
   orderFilterOptionsQueryKeys.all,
@@ -304,4 +312,14 @@ export async function invalidateMovementQueries(queryClient: QueryCacheClient) {
 
 export async function invalidateStockIntegrityQueries(queryClient: QueryCacheClient) {
   await invalidateQueryKeys(queryClient, STOCK_INTEGRITY_MUTATION_QUERY_KEYS);
+}
+
+export async function invalidateMaterialPlanningMutationQueries(
+  queryClient: QueryCacheClient,
+  orderIds: ReadonlyArray<number>,
+) {
+  await invalidateQueryKeys(queryClient, [
+    ...MATERIAL_PLANNING_MUTATION_QUERY_KEYS,
+    ...buildOrderDetailQueryKeys(orderIds),
+  ]);
 }

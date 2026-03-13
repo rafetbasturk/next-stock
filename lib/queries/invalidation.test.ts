@@ -13,6 +13,7 @@ import {
   invalidateDeliveryCreateQueries,
   invalidateDeliveryRemoveQueries,
   invalidateDeliveryUpdateQueries,
+  invalidateMaterialPlanningMutationQueries,
   invalidateMovementQueries,
   invalidateOrderCreateQueries,
   invalidateOrderRemoveQueries,
@@ -353,5 +354,26 @@ test("invalidateMovementQueries refreshes movement, product, and order readiness
     ordersMaterialPlanningPaginatedQueryKeys.all,
     orderDetailQueryKeys.all,
     orderHistoryQueryKeys.all,
+  ]);
+});
+
+test("invalidateMaterialPlanningMutationQueries refreshes material planning and affected orders", async () => {
+  const { invalidated, queryClient } = createQueryClientSpy();
+
+  await invalidateMaterialPlanningMutationQueries(queryClient, [11, 12, 11]);
+
+  assert.deepEqual(invalidated, [
+    ordersPaginatedQueryKeys.all,
+    orderFilterOptionsQueryKeys.all,
+    yearRangeQueryKeys.all,
+    ordersTrackingPaginatedQueryKeys.all,
+    orderTrackingFilterOptionsQueryKeys.all,
+    ordersMaterialPlanningPaginatedQueryKeys.all,
+    orderDetailQueryKeys.detail(11),
+    orderHistoryQueryKeys.detail(11),
+    orderDetailQueryKeys.detail(12),
+    orderHistoryQueryKeys.detail(12),
+    orderDetailQueryKeys.detail(11),
+    orderHistoryQueryKeys.detail(11),
   ]);
 });

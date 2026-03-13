@@ -589,10 +589,19 @@
         "missing": "{count} eksik",
         "completed": "Tamamlandı"
       },
+      "materialPlanning": {
+        "planned": "Malzeme planlandı",
+        "plannedBy": "Malzeme planlayan: {user}",
+        "notPlanned": "Malzeme planlanmadı",
+        "undo": "Malzeme planlamayı geri al",
+        "undoLoading": "Geri alınıyor...",
+        "undoSuccess": "Malzeme planlama geri alındı."
+      },
       "columns": {
         "status": "Durum",
         "product": "Ürün",
         "price": "Fiyat",
+        "stock": "Stok",
         "progress": "İlerleme",
         "ordered": "Sipariş",
         "delivered": "Teslim",
@@ -660,6 +669,9 @@
     "actions": {
       "openRoute": "Malzeme Planlama",
       "export": "Excel Aktar",
+      "markPlanned": "Malzeme Planlandı",
+      "markingPlanned": "İşleniyor...",
+      "planSuccess": "Malzeme planlama tamamlandı olarak işaretlendi.",
       "editProduct": "Ürünü Düzenle",
       "loadingProduct": "Ürün yükleniyor...",
       "openMenu": "İşlemleri aç"
