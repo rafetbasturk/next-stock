@@ -178,6 +178,47 @@ export const normalizeOrderTrackingSearch = (
   shortageOnly: s.shortageOnly ?? false,
 });
 
+export const materialPlanningSortFields = [
+  "product_code",
+  "product_name",
+  "stock",
+  "open_order_quantity",
+  "purchase_quantity",
+  "material",
+  "specs",
+] as const;
+
+export const materialPlanningDefaultStatus =
+  "KAYIT|KISMEN HAZIR" as const;
+
+export const materialPlanningSearchSchema = z.object({
+  ...sharedSearchSchema.shape,
+  sortBy: z.enum(materialPlanningSortFields).catch("purchase_quantity"),
+  sortDir: z.enum(["asc", "desc"]).catch("desc"),
+  status: optionalString,
+  customerId: optionalString,
+  startDate: optionalString,
+  endDate: optionalString,
+});
+
+export type MaterialPlanningSearch = z.infer<
+  typeof materialPlanningSearchSchema
+>;
+
+export const normalizeMaterialPlanningSearch = (
+  s: Partial<MaterialPlanningSearch>,
+): MaterialPlanningSearch => ({
+  pageIndex: s.pageIndex ?? 0,
+  pageSize: s.pageSize ?? 20,
+  q: s.q || undefined,
+  sortBy: s.sortBy ?? "purchase_quantity",
+  sortDir: s.sortDir ?? "desc",
+  status: s.status || materialPlanningDefaultStatus,
+  customerId: s.customerId || undefined,
+  startDate: s.startDate || undefined,
+  endDate: s.endDate || undefined,
+});
+
 export const deliveriesSortFields = [
   "delivery_number",
   "delivery_date",

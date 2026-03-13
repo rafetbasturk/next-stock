@@ -17,6 +17,7 @@ import {
   TruckIcon,
   UsersIcon,
   ArrowDownUp,
+  ClipboardListIcon,
   ListChecksIcon,
 } from "lucide-react";
 
@@ -99,6 +100,11 @@ const navItems = [
     href: "/orders/tracking",
   },
   {
+    key: "materialPlanning",
+    icon: ClipboardListIcon,
+    href: "/material-planning",
+  },
+  {
     key: "products",
     icon: PackageIcon,
     href: "/products",
@@ -136,6 +142,9 @@ function isNavItemActive(pathname: string, href: string): boolean {
 
 function getRouteTitle(pathname: string, t: (key: string) => string): string {
   if (pathname === "/") return t("pageTitles.overview");
+  if (pathname.startsWith("/material-planning")) {
+    return t("pageTitles.materialPlanning");
+  }
   if (pathname.startsWith("/orders/tracking")) return t("pageTitles.orderTracking");
   if (pathname.startsWith("/orders")) return t("pageTitles.orders");
   if (pathname.startsWith("/products")) return t("pageTitles.products");

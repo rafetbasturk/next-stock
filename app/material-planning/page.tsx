@@ -1,15 +1,13 @@
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 
-import { CreateOrderButton } from "@/components/orders/create-order-button";
-import { OrdersMobileFilters } from "@/components/orders/orders-mobile-filters";
-import { OrdersTrackingButton } from "@/components/orders/orders-tracking-button";
-import { OrdersPageContent } from "@/components/orders/orders-page-content";
+import { MaterialPlanningExportButton } from "@/components/orders/material-planning-export-button";
+import { OrdersMaterialPlanningPageContent } from "@/components/orders/orders-material-planning-page-content";
 import { RouteHeaderConfig } from "@/components/route-header-config";
 import {
-  buildOrdersHref,
-  parseOrdersSearchParams,
-} from "@/lib/orders-search";
+  buildMaterialPlanningHref,
+  parseMaterialPlanningSearchParams,
+} from "@/lib/material-planning-search";
 import { firstParamValue } from "@/lib/search-params";
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
@@ -26,7 +24,7 @@ export default async function Page({
   const rawSortBy = firstParamValue(resolvedSearchParams.sortBy);
   const rawSortDir = firstParamValue(resolvedSearchParams.sortDir);
 
-  const search = parseOrdersSearchParams(resolvedSearchParams);
+  const search = parseMaterialPlanningSearchParams(resolvedSearchParams);
 
   const shouldCanonicalizeRequiredParams =
     rawPageIndex !== String(search.pageIndex) ||
@@ -35,18 +33,16 @@ export default async function Page({
     rawSortDir !== search.sortDir;
 
   if (shouldCanonicalizeRequiredParams) {
-    redirect(buildOrdersHref(search));
+    redirect(buildMaterialPlanningHref(search));
   }
 
   return (
     <>
-      <RouteHeaderConfig title={t("pageTitles.orders")}>
-        <OrdersMobileFilters search={search} />
-        <OrdersTrackingButton />
-        <CreateOrderButton />
+      <RouteHeaderConfig title={t("pageTitles.materialPlanning")}>
+        <MaterialPlanningExportButton search={search} />
       </RouteHeaderConfig>
       <div className="h-[calc(100dvh-56px-2rem)] min-h-0 min-w-0 overflow-hidden md:h-[calc(100dvh-56px-3rem)]">
-        <OrdersPageContent search={search} />
+        <OrdersMaterialPlanningPageContent search={search} />
       </div>
     </>
   );

@@ -4,6 +4,7 @@
       "overview": "Overview",
       "orders": "Orders",
       "orderTracking": "Order Tracking",
+      "materialPlanning": "Material Planning",
       "products": "Products",
       "movements": "Movements",
       "customers": "Customers",
@@ -15,6 +16,7 @@
       "overview": "Overview",
       "orders": "Orders",
       "orderTracking": "Order Tracking",
+      "materialPlanning": "Material Planning",
       "products": "Products",
       "productDetail": "Product Details",
       "movements": "Movements",
@@ -590,6 +592,7 @@
       "columns": {
         "status": "Status",
         "product": "Product",
+        "price": "Price",
         "progress": "Progress",
         "ordered": "Ordered",
         "delivered": "Delivered",
@@ -608,6 +611,7 @@
       "orderDate": "Order Date",
       "customer": "Customer",
       "deliveryAddress": "Delivery Address",
+      "notes": "Notes",
       "materialCode": "Material Code",
       "materialName": "Material Name",
       "stock": "Stock",
@@ -634,7 +638,8 @@
       "status": "Status",
       "shortageOnly": "Shortage only",
       "clearSearch": "Clear search",
-      "clearAll": "Clear all"
+      "clearAll": "Clear all",
+      "columns": "Columns"
     },
     "mobile": {
       "lineLabel": "Line No: {lineNumber}"
@@ -649,6 +654,61 @@
     "page": "Page {current} of {total}",
     "errors": {
       "loadFailed": "Tracking rows could not be loaded."
+    }
+  },
+  "MaterialPlanningTable": {
+    "actions": {
+      "openRoute": "Material Planning",
+      "export": "Export Excel",
+      "editProduct": "Edit Product",
+      "loadingProduct": "Loading product...",
+      "openMenu": "Open actions"
+    },
+    "export": {
+      "sheetName": "Material Planning",
+      "filenamePrefix": "material-planning",
+      "columns": {
+        "productCode": "Product Code",
+        "productName": "Product Name",
+        "neededQuantity": "Needed Quantity",
+        "material": "Material",
+        "specs": "Specifications"
+      }
+    },
+    "columns": {
+      "productCode": "Product Code",
+      "productName": "Product Name",
+      "actions": "Actions",
+      "customer": "Customer",
+      "openOrderQuantity": "Open Order Qty",
+      "stock": "Stock",
+      "purchaseQuantity": "Purchase Qty",
+      "material": "Material",
+      "specs": "Specifications"
+    },
+    "status": {
+      "KAYIT": "Registered",
+      "ÜRETİM": "In Production",
+      "KISMEN_HAZIR": "Partially Ready",
+      "HAZIR": "Ready",
+      "BİTTİ": "Completed",
+      "İPTAL": "Cancelled"
+    },
+    "filters": {
+      "searchLabel": "Search",
+      "searchPlaceholder": "Search products, material, or specs...",
+      "status": "Status",
+      "clearSearch": "Clear search",
+      "clearAll": "Clear all",
+      "columns": "Columns"
+    },
+    "empty": "No material shortages found.",
+    "showing": "Showing {from}-{to} of {total} products",
+    "rowsPerPage": "Rows",
+    "updating": "Updating...",
+    "page": "Page {current} of {total}",
+    "errors": {
+      "loadFailed": "Material planning rows could not be loaded."
     }
   },
   "DeliveriesTable": {

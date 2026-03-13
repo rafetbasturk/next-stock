@@ -37,17 +37,26 @@ import {
   resolveRequestTimeZone,
 } from "@/lib/timezone";
 import {
+  buildMaterialPlanningRows as aggregateMaterialPlanningRows,
+  createMaterialPlanningComparator as createMaterialPlanningRowComparator,
+  type MaterialPlanningSourceRow,
+} from "@/lib/material-planning";
+import {
   isOrderStatus,
   toCurrencyOrDefault,
   toUnitOrDefault,
+  type Currency,
   type OrderStatus,
 } from "@/lib/types/domain";
 import {
   type OrderTrackingSearch,
+  materialPlanningDefaultStatus,
+  materialPlanningSearchSchema,
   orderTrackingSearchSchema,
   ordersSearchSchema,
 } from "@/lib/types/search";
 import type {
+  MaterialPlanningTableRow,
   OrderDetail,
   OrderTableRow,
   OrderTrackingTableRow,
@@ -137,6 +146,14 @@ type PaginatedOrderTrackingResult = {
   pageCount: number;
 };
 
+type PaginatedMaterialPlanningResult = {
+  data: Array<MaterialPlanningTableRow>;
+  pageIndex: number;
+  pageSize: number;
+  total: number;
+  pageCount: number;
+};
+
 type OrderFilterOptionsResult = {
   statuses: Array<string>;
   customers: Array<{
@@ -166,8 +183,11 @@ type OrderHistoryDelivery = {
 type OrderHistoryItem = {
   id: number;
   itemType: "standard" | "custom";
+  productId: number | null;
   productCode: string;
   productName: string | null;
+  unitPrice: number;
+  currency: Currency;
   quantity: number;
   deliveries: Array<OrderHistoryDelivery>;
 };
@@ -349,16 +369,6 @@ type OrderTrackingSourceRow = Omit<
   itemSortId: number;
 };
 
-function compareNullableNumbers(
-  left: number | null,
-  right: number | null,
-): number {
-  if (left == null && right == null) return 0;
-  if (left == null) return 1;
-  if (right == null) return -1;
-  return left - right;
-}
-
 function compareNullableStrings(
   left: string | null,
   right: string | null,
@@ -372,6 +382,16 @@ function compareNullableStrings(
   });
 }
 
+function compareNullableNumbers(
+  left: number | null,
+  right: number | null,
+): number {
+  if (left == null && right == null) return 0;
+  if (left == null) return 1;
+  if (right == null) return -1;
+  return left - right;
+}
+
 function buildOrderTrackingSearchText(row: OrderTrackingTableRow): string {
   return [
     row.orderNumber,
@@ -380,6 +400,7 @@ function buildOrderTrackingSearchText(row: OrderTrackingTableRow): string {
     row.customerName ?? "",
     row.status,
     row.deliveryAddress ?? "",
+    row.notes ?? "",
     row.materialCode ?? "",
     row.materialName,
     row.stockQuantity == null ? "" : String(row.stockQuantity),
@@ -598,6 +619,7 @@ export async function getPaginatedOrderTracking({
         customerName: customers.name,
         status: orders.status,
         deliveryAddress: orders.deliveryAddress,
+        notes: orders.notes,
         materialCode: products.code,
         materialName: sql<string>`
           coalesce(${products.name}, ${products.code}, '')
@@ -633,6 +655,7 @@ export async function getPaginatedOrderTracking({
         customerName: customers.name,
         status: orders.status,
         deliveryAddress: orders.deliveryAddress,
+        notes: orders.notes,
         materialCode: sql<string | null>`null`,
         materialName: customOrderItems.name,
         stockQuantity: sql<number | null>`null`,
@@ -816,6 +839,78 @@ export async function getPaginatedOrderTracking({
     total,
     pageCount: Math.ceil(total / safePageSize),
   };
+}
+
+export async function getPaginatedMaterialPlanning({
+  data,
+}: ServerFnPayload<unknown>): Promise<PaginatedMaterialPlanningResult> {
+  const parsed = materialPlanningSearchSchema.parse(data);
+  const { pageIndex, pageSize } = parsed;
+  const safePageIndex = Math.max(0, pageIndex);
+  const safePageSize = Math.min(Math.max(10, pageSize), 200);
+  const rows = await getMaterialPlanningRows(parsed);
+  const total = rows.length;
+  const pagedRows = rows.slice(
+    safePageIndex * safePageSize,
+    safePageIndex * safePageSize + safePageSize,
+  );
+
+  return {
+    data: pagedRows,
+    pageIndex: safePageIndex,
+    pageSize: safePageSize,
+    total,
+    pageCount: Math.ceil(total / safePageSize),
+  };
+}
+
+export async function getMaterialPlanningRows(
+  data: unknown,
+): Promise<Array<MaterialPlanningTableRow>> {
+  const parsed = materialPlanningSearchSchema.parse(data);
+  const {
+    sortBy = "purchase_quantity",
+    sortDir = "desc",
+  } = parsed;
+  const materialPlanningStatuses = parseStatuses(materialPlanningDefaultStatus);
+  const conditions: Array<SQL> = [
+    notDeleted(orderItems),
+    notDeleted(orders),
+    notDeleted(products),
+    inArray(orders.status, materialPlanningStatuses),
+  ];
+
+  const standardDeliveredByItemId = createStandardDeliveredByItemIdSubquery();
+
+  const sourceRows: Array<MaterialPlanningSourceRow> = await db
+    .select({
+      productId: products.id,
+      productCode: products.code,
+      productName: sql<string>`
+        coalesce(${products.name}, ${products.code}, '')
+      `,
+      stockQuantity: products.stockQuantity,
+      remainingQuantity: sql<number>`
+        greatest(
+          ${orderItems.quantity} - coalesce(${standardDeliveredByItemId.netDelivered}, 0),
+          0
+        )::int
+      `,
+      material: products.material,
+      specs: products.specs,
+    })
+    .from(orderItems)
+    .innerJoin(orders, eq(orders.id, orderItems.orderId))
+    .innerJoin(products, eq(products.id, orderItems.productId))
+    .leftJoin(
+      standardDeliveredByItemId,
+      eq(standardDeliveredByItemId.itemId, orderItems.id),
+    )
+    .where(conditions.length === 1 ? conditions[0] : and(...conditions)!);
+
+  return aggregateMaterialPlanningRows(sourceRows).sort(
+    createMaterialPlanningRowComparator(sortBy, sortDir),
+  );
 }
 
 export async function getOrderTrackingFilterOptions(): Promise<OrderFilterOptionsResult> {
@@ -1575,7 +1670,10 @@ export async function getOrderHistory({
       db
         .select({
           id: orderItems.id,
+          productId: orderItems.productId,
           quantity: orderItems.quantity,
+          unitPrice: orderItems.unitPrice,
+          currency: orderItems.currency,
           productName: products.name,
           productCode: products.code,
         })
@@ -1586,6 +1684,8 @@ export async function getOrderHistory({
         .select({
           id: customOrderItems.id,
           quantity: customOrderItems.quantity,
+          unitPrice: customOrderItems.unitPrice,
+          currency: customOrderItems.currency,
           productCode: customOrderItems.name,
           productName: customOrderItems.notes,
         })
@@ -1676,8 +1776,11 @@ export async function getOrderHistory({
     ...standardItems.map((item) => ({
       id: item.id,
       itemType: "standard" as const,
+      productId: item.productId,
       productCode: item.productCode,
       productName: item.productName,
+      unitPrice: item.unitPrice,
+      currency: item.currency,
       quantity: item.quantity,
       deliveries:
         standardDeliveriesByItemId
@@ -1687,8 +1790,11 @@ export async function getOrderHistory({
     ...customItems.map((item) => ({
       id: item.id,
       itemType: "custom" as const,
+      productId: null,
       productCode: item.productCode,
       productName: item.productName,
+      unitPrice: item.unitPrice,
+      currency: item.currency,
       quantity: item.quantity,
       deliveries:
         customDeliveriesByItemId

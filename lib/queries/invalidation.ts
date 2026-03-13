@@ -15,6 +15,7 @@ import { orderHistoryQueryKeys } from "@/lib/queries/order-history";
 import { orderLastNumberQueryKeys } from "@/lib/queries/order-last-number";
 import { orderProductOptionsQueryKeys } from "@/lib/queries/order-product-options";
 import { orderTrackingFilterOptionsQueryKeys } from "@/lib/queries/order-tracking-filter-options";
+import { ordersMaterialPlanningPaginatedQueryKeys } from "@/lib/queries/orders-material-planning-paginated";
 import { ordersPaginatedQueryKeys } from "@/lib/queries/orders-paginated";
 import { ordersTrackingPaginatedQueryKeys } from "@/lib/queries/orders-tracking-paginated";
 import { productDetailQueryKeys } from "@/lib/queries/product-detail";
@@ -35,6 +36,10 @@ const ORDER_TRACKING_QUERY_KEYS = [
   orderTrackingFilterOptionsQueryKeys.all,
 ] as const satisfies ReadonlyArray<QueryKey>;
 
+const MATERIAL_PLANNING_QUERY_KEYS = [
+  ordersMaterialPlanningPaginatedQueryKeys.all,
+] as const satisfies ReadonlyArray<QueryKey>;
+
 const ORDER_MUTATION_SHARED_QUERY_KEYS = [
   ordersPaginatedQueryKeys.all,
   orderFilterOptionsQueryKeys.all,
@@ -42,6 +47,7 @@ const ORDER_MUTATION_SHARED_QUERY_KEYS = [
   orderLastNumberQueryKeys.all,
   yearRangeQueryKeys.all,
   ...ORDER_TRACKING_QUERY_KEYS,
+  ...MATERIAL_PLANNING_QUERY_KEYS,
 ] as const satisfies ReadonlyArray<QueryKey>;
 
 const DELIVERY_MUTATION_SHARED_QUERY_KEYS = [
@@ -56,6 +62,7 @@ const DELIVERY_MUTATION_SHARED_QUERY_KEYS = [
   orderFilterOptionsQueryKeys.all,
   yearRangeQueryKeys.all,
   ...ORDER_TRACKING_QUERY_KEYS,
+  ...MATERIAL_PLANNING_QUERY_KEYS,
 ] as const satisfies ReadonlyArray<QueryKey>;
 
 const CUSTOMER_MUTATION_QUERY_KEYS = [
@@ -68,6 +75,7 @@ const CUSTOMER_MUTATION_QUERY_KEYS = [
   deliveriesPaginatedQueryKeys.all,
   deliveryFilterOptionsQueryKeys.all,
   ...ORDER_TRACKING_QUERY_KEYS,
+  ...MATERIAL_PLANNING_QUERY_KEYS,
 ] as const satisfies ReadonlyArray<QueryKey>;
 
 const PRODUCT_CREATE_QUERY_KEYS = [
@@ -83,6 +91,7 @@ const PRODUCT_UPDATE_QUERY_KEYS = [
   orderProductOptionsQueryKeys.all,
   productRemovableMovementsQueryKeys.all,
   stockIntegrityQueryKeys.all,
+  ...MATERIAL_PLANNING_QUERY_KEYS,
 ] as const satisfies ReadonlyArray<QueryKey>;
 
 const PRODUCT_REMOVE_QUERY_KEYS = [
@@ -90,6 +99,7 @@ const PRODUCT_REMOVE_QUERY_KEYS = [
   productFilterOptionsQueryKeys.all,
   orderProductOptionsQueryKeys.all,
   productRemovableMovementsQueryKeys.all,
+  ...MATERIAL_PLANNING_QUERY_KEYS,
 ] as const satisfies ReadonlyArray<QueryKey>;
 
 const PRODUCT_STOCK_ADJUSTMENT_QUERY_KEYS = [
@@ -101,6 +111,7 @@ const PRODUCT_STOCK_ADJUSTMENT_QUERY_KEYS = [
   ordersPaginatedQueryKeys.all,
   orderFilterOptionsQueryKeys.all,
   ...ORDER_TRACKING_QUERY_KEYS,
+  ...MATERIAL_PLANNING_QUERY_KEYS,
   orderDetailQueryKeys.all,
   orderHistoryQueryKeys.all,
 ] as const satisfies ReadonlyArray<QueryKey>;
@@ -113,6 +124,7 @@ const MOVEMENT_MUTATION_QUERY_KEYS = [
   ordersPaginatedQueryKeys.all,
   orderFilterOptionsQueryKeys.all,
   ...ORDER_TRACKING_QUERY_KEYS,
+  ...MATERIAL_PLANNING_QUERY_KEYS,
   orderDetailQueryKeys.all,
   orderHistoryQueryKeys.all,
 ] as const satisfies ReadonlyArray<QueryKey>;

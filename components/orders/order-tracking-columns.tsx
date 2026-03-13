@@ -58,7 +58,6 @@ export function getOrderTrackingColumns(
       cell: ({ row }) => (
         <div className="truncate font-medium">{row.original.orderNumber}</div>
       ),
-      enableHiding: false,
     },
     {
       accessorKey: "lineNumber",
@@ -68,7 +67,6 @@ export function getOrderTrackingColumns(
         headerAlign: "center",
       },
       cell: ({ row }) => row.original.lineNumber * 10,
-      enableHiding: false,
     },
     {
       accessorKey: "orderDate",
@@ -85,7 +83,6 @@ export function getOrderTrackingColumns(
           month: "2-digit",
           day: "2-digit",
         }),
-      enableHiding: false,
     },
     {
       accessorKey: "materialCode",
@@ -104,7 +101,6 @@ export function getOrderTrackingColumns(
       cell: ({ row }) => (
         <div className="truncate">{row.original.materialName}</div>
       ),
-      enableHiding: false,
     },
     {
       accessorKey: "stockQuantity",
@@ -127,7 +123,6 @@ export function getOrderTrackingColumns(
         headerAlign: "center",
       },
       cell: ({ row }) => row.original.orderedQuantity,
-      enableHiding: false,
     },
     {
       accessorKey: "deliveredQuantity",
@@ -150,7 +145,6 @@ export function getOrderTrackingColumns(
           row.hasShortage ? "font-semibold text-red-600 dark:text-red-400" : "",
       },
       cell: ({ row }) => row.original.remainingQuantity,
-      enableHiding: false,
     },
     {
       accessorKey: "status",
@@ -194,6 +188,16 @@ export function getOrderTrackingColumns(
         <div className="truncate">
           {row.original.deliveryAddress?.trim() || "-"}
         </div>
+      ),
+    },
+    {
+      accessorKey: "notes",
+      size: 180,
+      meta: {
+        headerLabel: t("columns.notes"),
+      },
+      cell: ({ row }) => (
+        <div className="truncate">{row.original.notes?.trim() || "-"}</div>
       ),
     },
     {
@@ -280,7 +284,6 @@ export function getOrderTrackingColumns(
             {t("history.none")}
           </span>
         ),
-      enableHiding: false,
     },
   ];
 }

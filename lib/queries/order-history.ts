@@ -3,6 +3,7 @@ import { queryOptions, useQuery } from "@tanstack/react-query";
 import type { ApiResponse } from "@/lib/errors/api-response";
 import { toClientError } from "@/lib/errors/client-error";
 import { QUERY_STALE_TIMES } from "@/lib/queries/query-defaults";
+import type { Currency } from "@/lib/types/domain";
 
 export type OrderHistoryItemDelivery = {
   id: number;
@@ -15,8 +16,11 @@ export type OrderHistoryItemDelivery = {
 export type OrderHistoryItem = {
   id: number;
   itemType: "standard" | "custom";
+  productId: number | null;
   productCode: string;
   productName: string | null;
+  unitPrice: number;
+  currency: Currency;
   quantity: number;
   deliveries: Array<OrderHistoryItemDelivery>;
 };

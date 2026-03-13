@@ -2,17 +2,20 @@
 
 import { useTranslations } from "next-intl";
 
-import { OrdersDataTable } from "@/components/orders/orders-data-table";
-import { useOrdersPaginated } from "@/lib/queries/orders-paginated";
-import type { OrdersSearch } from "@/lib/types/search";
+import { OrdersMaterialPlanningDataTable } from "@/components/orders/orders-material-planning-data-table";
+import { useOrdersMaterialPlanningPaginated } from "@/lib/queries/orders-material-planning-paginated";
+import type { MaterialPlanningSearch } from "@/lib/types/search";
 
-type OrdersPageContentProps = {
-  search: OrdersSearch;
+type OrdersMaterialPlanningPageContentProps = {
+  search: MaterialPlanningSearch;
 };
 
-export function OrdersPageContent({ search }: OrdersPageContentProps) {
-  const t = useTranslations("OrdersTable");
-  const { data, isError, isPending, isFetching } = useOrdersPaginated(search);
+export function OrdersMaterialPlanningPageContent({
+  search,
+}: OrdersMaterialPlanningPageContentProps) {
+  const t = useTranslations("MaterialPlanningTable");
+  const { data, isError, isPending, isFetching } =
+    useOrdersMaterialPlanningPaginated(search);
 
   if (isError) {
     return (
@@ -34,7 +37,7 @@ export function OrdersPageContent({ search }: OrdersPageContentProps) {
   };
 
   return (
-    <OrdersDataTable
+    <OrdersMaterialPlanningDataTable
       data={paginated.data}
       total={paginated.total}
       pageIndex={paginated.pageIndex}

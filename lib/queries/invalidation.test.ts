@@ -29,6 +29,7 @@ import { orderHistoryQueryKeys } from "@/lib/queries/order-history";
 import { orderLastNumberQueryKeys } from "@/lib/queries/order-last-number";
 import { orderProductOptionsQueryKeys } from "@/lib/queries/order-product-options";
 import { orderTrackingFilterOptionsQueryKeys } from "@/lib/queries/order-tracking-filter-options";
+import { ordersMaterialPlanningPaginatedQueryKeys } from "@/lib/queries/orders-material-planning-paginated";
 import { ordersPaginatedQueryKeys } from "@/lib/queries/orders-paginated";
 import { ordersTrackingPaginatedQueryKeys } from "@/lib/queries/orders-tracking-paginated";
 import { productDetailQueryKeys } from "@/lib/queries/product-detail";
@@ -135,6 +136,7 @@ test("invalidateOrderCreateQueries refreshes order-tracking alongside order list
     yearRangeQueryKeys.all,
     ordersTrackingPaginatedQueryKeys.all,
     orderTrackingFilterOptionsQueryKeys.all,
+    ordersMaterialPlanningPaginatedQueryKeys.all,
   ]);
 });
 
@@ -151,6 +153,7 @@ test("invalidateOrderUpdateQueries targets the affected order detail and history
     yearRangeQueryKeys.all,
     ordersTrackingPaginatedQueryKeys.all,
     orderTrackingFilterOptionsQueryKeys.all,
+    ordersMaterialPlanningPaginatedQueryKeys.all,
     orderDetailQueryKeys.detail(99),
     orderHistoryQueryKeys.detail(99),
   ]);
@@ -169,6 +172,7 @@ test("invalidateOrderRemoveQueries keeps targeted invalidation for the removed o
     yearRangeQueryKeys.all,
     ordersTrackingPaginatedQueryKeys.all,
     orderTrackingFilterOptionsQueryKeys.all,
+    ordersMaterialPlanningPaginatedQueryKeys.all,
     orderDetailQueryKeys.detail(15),
     orderHistoryQueryKeys.detail(15),
   ]);
@@ -200,6 +204,7 @@ test("invalidateDeliveryCreateQueries seeds detail cache and invalidates order-t
     yearRangeQueryKeys.all,
     ordersTrackingPaginatedQueryKeys.all,
     orderTrackingFilterOptionsQueryKeys.all,
+    ordersMaterialPlanningPaginatedQueryKeys.all,
     orderDetailQueryKeys.detail(11),
     orderHistoryQueryKeys.detail(11),
     orderDetailQueryKeys.detail(12),
@@ -236,6 +241,7 @@ test("invalidateDeliveryUpdateQueries refreshes the specific delivery and affect
     yearRangeQueryKeys.all,
     ordersTrackingPaginatedQueryKeys.all,
     orderTrackingFilterOptionsQueryKeys.all,
+    ordersMaterialPlanningPaginatedQueryKeys.all,
     deliveryDetailQueryKeys.detail(detail.id),
     deliveryHistoryQueryKeys.detail(detail.id),
     orderDetailQueryKeys.detail(11),
@@ -267,6 +273,7 @@ test("invalidateDeliveryRemoveQueries invalidates specific delivery caches and b
     yearRangeQueryKeys.all,
     ordersTrackingPaginatedQueryKeys.all,
     orderTrackingFilterOptionsQueryKeys.all,
+    ordersMaterialPlanningPaginatedQueryKeys.all,
     deliveryDetailQueryKeys.detail(73),
     deliveryHistoryQueryKeys.detail(73),
     productDetailQueryKeys.all,
@@ -287,6 +294,7 @@ test("invalidateProductUpdateQueries refreshes the specific product detail cache
     orderProductOptionsQueryKeys.all,
     productRemovableMovementsQueryKeys.all,
     ["stock", "integrity"],
+    ordersMaterialPlanningPaginatedQueryKeys.all,
     productDetailQueryKeys.detail(21),
   ]);
 });
@@ -301,6 +309,7 @@ test("invalidateProductRemoveQueries keeps targeted invalidation for the removed
     productFilterOptionsQueryKeys.all,
     orderProductOptionsQueryKeys.all,
     productRemovableMovementsQueryKeys.all,
+    ordersMaterialPlanningPaginatedQueryKeys.all,
     productDetailQueryKeys.detail(34),
   ]);
 });
@@ -320,6 +329,7 @@ test("invalidateProductStockAdjustmentQueries refreshes product detail alongside
     orderFilterOptionsQueryKeys.all,
     ordersTrackingPaginatedQueryKeys.all,
     orderTrackingFilterOptionsQueryKeys.all,
+    ordersMaterialPlanningPaginatedQueryKeys.all,
     orderDetailQueryKeys.all,
     orderHistoryQueryKeys.all,
     productDetailQueryKeys.detail(55),
@@ -340,6 +350,7 @@ test("invalidateMovementQueries refreshes movement, product, and order readiness
     orderFilterOptionsQueryKeys.all,
     ordersTrackingPaginatedQueryKeys.all,
     orderTrackingFilterOptionsQueryKeys.all,
+    ordersMaterialPlanningPaginatedQueryKeys.all,
     orderDetailQueryKeys.all,
     orderHistoryQueryKeys.all,
   ]);

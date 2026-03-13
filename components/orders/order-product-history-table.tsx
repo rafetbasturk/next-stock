@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { CheckCircle, Clock } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -12,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { convertToCurrencyFormat } from "@/lib/currency";
 import { formatDateTime } from "@/lib/datetime";
 import { useOrderHistory } from "@/lib/queries/order-history";
 import { getClientTimeZone } from "@/lib/timezone-client";
@@ -63,8 +65,16 @@ export function OrderProductHistoryTable({
 
     return {
       id: `${item.itemType}-${item.id}`,
+      productId: item.productId,
       productCode: item.productCode,
       productName: item.productName,
+      unitPrice: item.unitPrice,
+      currency: item.currency,
+      formattedPrice: convertToCurrencyFormat({
+        cents: item.unitPrice,
+        currency: item.currency,
+        locale,
+      }),
       qty: item.quantity,
       delivered,
       remaining,
@@ -92,6 +102,9 @@ export function OrderProductHistoryTable({
             <TableRow className="bg-muted text-muted-foreground text-xs capitalize">
               <TableHead className="min-w-35">{t("columns.status")}</TableHead>
               <TableHead className="min-w-45">{t("columns.product")}</TableHead>
+              <TableHead className="min-w-27.5 text-right">
+                {t("columns.price")}
+              </TableHead>
               <TableHead className="min-w-17.5 text-center">
                 {t("columns.ordered")}
               </TableHead>
@@ -162,14 +175,36 @@ export function OrderProductHistoryTable({
                 </TableCell>
 
                 <TableCell>
-                  <div className="text-foreground font-medium">
-                    {item.productCode}
-                  </div>
-                  {item.productName ? (
-                    <div className="text-muted-foreground text-xs">
-                      {item.productName}
-                    </div>
-                  ) : null}
+                  {item.productId ? (
+                    <Link
+                      href={`/products/${item.productId}`}
+                      className="block rounded-sm underline-offset-2 transition-colors hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                    >
+                      <div className="text-foreground font-medium">
+                        {item.productCode}
+                      </div>
+                      {item.productName ? (
+                        <div className="text-muted-foreground text-xs">
+                          {item.productName}
+                        </div>
+                      ) : null}
+                    </Link>
+                  ) : (
+                    <>
+                      <div className="text-foreground font-medium">
+                        {item.productCode}
+                      </div>
+                      {item.productName ? (
+                        <div className="text-muted-foreground text-xs">
+                          {item.productName}
+                        </div>
+                      ) : null}
+                    </>
+                  )}
+                </TableCell>
+
+                <TableCell className="text-right font-medium">
+                  {item.formattedPrice}
                 </TableCell>
 
                 <TableCell className="text-foreground text-center">
@@ -246,7 +281,7 @@ export function OrderProductHistoryTable({
             {!preparedItems.length ? (
               <TableRow>
                 <TableCell
-                  colSpan={6}
+                  colSpan={7}
                   className="text-muted-foreground py-8 text-center"
                 >
                   {t("empty")}
@@ -268,14 +303,32 @@ export function OrderProductHistoryTable({
           >
             <div className="flex items-start justify-between gap-2">
               <div>
-                <p className="text-foreground text-sm font-medium">
-                  {item.productCode}
-                </p>
-                {item.productName ? (
-                  <p className="text-muted-foreground text-xs">
-                    {item.productName}
-                  </p>
-                ) : null}
+                {item.productId ? (
+                  <Link
+                    href={`/products/${item.productId}`}
+                    className="block rounded-sm underline-offset-2 transition-colors hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  >
+                    <p className="text-foreground text-sm font-medium">
+                      {item.productCode}
+                    </p>
+                    {item.productName ? (
+                      <p className="text-muted-foreground text-xs">
+                        {item.productName}
+                      </p>
+                    ) : null}
+                  </Link>
+                ) : (
+                  <>
+                    <p className="text-foreground text-sm font-medium">
+                      {item.productCode}
+                    </p>
+                    {item.productName ? (
+                      <p className="text-muted-foreground text-xs">
+                        {item.productName}
+                      </p>
+                    ) : null}
+                  </>
+                )}
               </div>
 
               <span
@@ -324,7 +377,15 @@ export function OrderProductHistoryTable({
               </div>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 text-center">
+            <div className="grid grid-cols-2 gap-2 text-center sm:grid-cols-4">
+              <div className="rounded-md border bg-muted/20 py-1.5">
+                <p className="text-muted-foreground text-[11px]">
+                  {t("columns.price")}
+                </p>
+                <p className="text-foreground text-sm font-semibold">
+                  {item.formattedPrice}
+                </p>
+              </div>
               <div className="rounded-md border bg-muted/20 py-1.5">
                 <p className="text-muted-foreground text-[11px]">
                   {t("columns.ordered")}

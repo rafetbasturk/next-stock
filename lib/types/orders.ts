@@ -40,6 +40,7 @@ export type OrderTrackingTableRow = {
   customerName: string | null;
   status: OrderStatus;
   deliveryAddress: string | null;
+  notes: string | null;
   materialCode: string | null;
   materialName: string;
   stockQuantity: number | null;
@@ -51,6 +52,17 @@ export type OrderTrackingTableRow = {
   unit: Unit | null;
   hasShortage: boolean;
   deliveryHistory: Array<OrderTrackingDeliveryHistoryItem>;
+};
+
+export type MaterialPlanningTableRow = {
+  productId: number;
+  productCode: string;
+  productName: string;
+  stockQuantity: number;
+  openOrderQuantity: number;
+  purchaseQuantity: number;
+  material: string | null;
+  specs: string | null;
 };
 
 export type OrderDetailStandardItem = {

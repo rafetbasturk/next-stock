@@ -43,6 +43,7 @@ import { useDataTablePaginationNavigation } from "@/hooks/use-data-table-paginat
 import { useDataTablePaginationState } from "@/hooks/use-data-table-pagination-state";
 import { useDebouncedTableSearchDraft } from "@/hooks/use-debounced-table-search-draft";
 import { useOrdersTrackingSearchNavigation } from "@/hooks/use-orders-tracking-search-navigation";
+import { usePersistedColumnVisibility } from "@/hooks/use-persisted-column-visibility";
 import { convertToCurrencyFormat } from "@/lib/currency";
 import { formatDateTime } from "@/lib/datetime";
 import { useOrderTrackingFilterOptions } from "@/lib/queries/order-tracking-filter-options";
@@ -53,6 +54,7 @@ import {
   type OrderTrackingSearch,
 } from "@/lib/types/search";
 import { cn } from "@/lib/utils";
+import { DataTableColumnVisibility } from "../datatable/data-table-column-visibility";
 
 type OrdersTrackingDataTableProps = {
   data: Array<OrderTrackingTableRow>;
@@ -63,6 +65,7 @@ type OrdersTrackingDataTableProps = {
   search: OrderTrackingSearch;
   isLoading?: boolean;
   isRefetching?: boolean;
+  enableColumnVisibility?: boolean;
 };
 
 const ORDER_STATUS_FALLBACK_VALUES = [
@@ -81,6 +84,7 @@ export function OrdersTrackingDataTable({
   search,
   isLoading = false,
   isRefetching = false,
+  enableColumnVisibility = true,
 }: OrdersTrackingDataTableProps) {
   const t = useTranslations("OrderTrackingTable");
   const tTableFilters = useTranslations("Table.filters");
@@ -88,6 +92,9 @@ export function OrdersTrackingDataTable({
   const timeZone = useMemo(() => getClientTimeZone(), []);
   const navigate = useOrdersTrackingSearchNavigation(search);
   const { data: filterOptions } = useOrderTrackingFilterOptions();
+  const [columnVisibility, setColumnVisibility] = usePersistedColumnVisibility({
+    storageKey: "ordersTracking:columnVisibility:v1",
+  });
 
   const columns = useMemo(
     () => getOrderTrackingColumns(t, locale, timeZone),
@@ -99,6 +106,10 @@ export function OrdersTrackingDataTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
+    state: {
+      columnVisibility,
+    },
+    onColumnVisibilityChange: setColumnVisibility,
   });
 
   const { fromRow, toRow, hasPrev, hasNext, pageSizeOptions } =
@@ -478,6 +489,18 @@ export function OrdersTrackingDataTable({
             ) : null}
           </>
         }
+        right={
+          enableColumnVisibility ? (
+            <DataTableColumnVisibility
+              table={table}
+              label={t("filters.columns")}
+              triggerClassName={DATA_TABLE_FILTER_TRIGGER_CLASSNAME}
+              getColumnLabel={(column) =>
+                column.columnDef.meta?.headerLabel ?? column.id
+              }
+            />
+          ) : null
+        }
         chips={
           showFilterChips ? (
             <DataTableActiveFilterChips
@@ -624,6 +647,10 @@ export function OrdersTrackingDataTable({
                           {row.stockQuantity ?? "-"}
                         </span>
                       }
+                    />
+                    <DataTableMobileField
+                      label={t("columns.notes")}
+                      value={row.notes?.trim() || "-"}
                     />
                     <DataTableMobileField
                       label={t("columns.unitPrice")}

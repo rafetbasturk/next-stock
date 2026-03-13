@@ -4,6 +4,7 @@
       "overview": "Genel Bakış",
       "orders": "Siparişler",
       "orderTracking": "Sipariş Takip",
+      "materialPlanning": "Malzeme Planlama",
       "products": "Ürünler",
       "movements": "Hareketler",
       "customers": "Müşteriler",
@@ -15,6 +16,7 @@
       "overview": "Genel Bakış",
       "orders": "Siparişler",
       "orderTracking": "Sipariş Takip",
+      "materialPlanning": "Malzeme Planlama",
       "products": "Ürünler",
       "productDetail": "Ürün Ayrıntıları",
       "movements": "Stok Hareketleri",
@@ -590,6 +592,7 @@
       "columns": {
         "status": "Durum",
         "product": "Ürün",
+        "price": "Fiyat",
         "progress": "İlerleme",
         "ordered": "Sipariş",
         "delivered": "Teslim",
@@ -608,6 +611,7 @@
       "orderDate": "Sipariş Tarihi",
       "customer": "Müşteri",
       "deliveryAddress": "Teslimat Adresi",
+      "notes": "Notlar",
       "materialCode": "Malzeme Kodu",
       "materialName": "Malzeme İsmi",
       "stock": "Stok",
@@ -634,7 +638,8 @@
       "status": "Sipariş Durumu",
       "shortageOnly": "Eksik stok",
       "clearSearch": "Aramayı temizle",
-      "clearAll": "Tümünü temizle"
+      "clearAll": "Tümünü temizle",
+      "columns": "Sütunlar"
     },
     "mobile": {
       "lineLabel": "Kalem No: {lineNumber}"
@@ -649,6 +654,61 @@
     "page": "Sayfa {current} / {total}",
     "errors": {
       "loadFailed": "Takip satırları yüklenemedi."
+    }
+  },
+  "MaterialPlanningTable": {
+    "actions": {
+      "openRoute": "Malzeme Planlama",
+      "export": "Excel Aktar",
+      "editProduct": "Ürünü Düzenle",
+      "loadingProduct": "Ürün yükleniyor...",
+      "openMenu": "İşlemleri aç"
+    },
+    "export": {
+      "sheetName": "Malzeme Planlama",
+      "filenamePrefix": "malzeme-planlama",
+      "columns": {
+        "productCode": "Ürün Kodu",
+        "productName": "Ürün Adı",
+        "neededQuantity": "İhtiyaç Miktarı",
+        "material": "Malzeme",
+        "specs": "Ölçü"
+      }
+    },
+    "columns": {
+      "productCode": "Ürün Kodu",
+      "productName": "Ürün Adı",
+      "actions": "İşlemler",
+      "customer": "Müşteri",
+      "openOrderQuantity": "Açık Sipariş",
+      "stock": "Stok",
+      "purchaseQuantity": "Satın Alma",
+      "material": "Malzeme",
+      "specs": "Ölçü"
+    },
+    "status": {
+      "KAYIT": "Kayıt",
+      "ÜRETİM": "Üretim",
+      "KISMEN_HAZIR": "Kısmen Hazır",
+      "HAZIR": "Hazır",
+      "BİTTİ": "Bitti",
+      "İPTAL": "İptal"
+    },
+    "filters": {
+      "searchLabel": "Arama",
+      "searchPlaceholder": "Ürün, malzeme veya ölçü ara...",
+      "status": "Sipariş Durumu",
+      "clearSearch": "Aramayı temizle",
+      "clearAll": "Tümünü temizle",
+      "columns": "Sütunlar"
+    },
+    "empty": "Malzeme eksiği bulunamadı.",
+    "showing": "{from}-{to} arası, toplam {total} ürün",
+    "rowsPerPage": "Satır",
+    "updating": "Güncelleniyor...",
+    "page": "Sayfa {current} / {total}",
+    "errors": {
+      "loadFailed": "Malzeme planlama satırları yüklenemedi."
     }
   },
   "DeliveriesTable": {
