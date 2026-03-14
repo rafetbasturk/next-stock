@@ -22,14 +22,17 @@ import { toClientError } from "@/lib/errors/client-error";
 import { useUndoMaterialPlanningCompletedMutation } from "@/lib/queries/material-planning-mutations";
 import { useOrderHistory } from "@/lib/queries/order-history";
 import { getClientTimeZone } from "@/lib/timezone-client";
+import type { OrderStatus } from "@/lib/types/domain";
 import { cn } from "@/lib/utils";
 
 type OrderProductHistoryTableProps = {
   orderId: number;
+  orderStatus: OrderStatus;
 };
 
 export function OrderProductHistoryTable({
   orderId,
+  orderStatus,
 }: OrderProductHistoryTableProps) {
   const t = useTranslations("OrdersTable.history");
   const locale = useLocale();
@@ -114,6 +117,12 @@ export function OrderProductHistoryTable({
       delivered,
       remaining,
       progress,
+      showMaterialPlanning:
+        item.itemType === "standard" &&
+        remaining > 0 &&
+        orderStatus !== "HAZIR" &&
+        orderStatus !== "BİTTİ" &&
+        orderStatus !== "İPTAL",
       materialPlannedAt: item.materialPlannedAt,
       materialPlannedBy: item.materialPlannedBy,
       canUndoMaterialPlanning: item.canUndoMaterialPlanning,
@@ -243,7 +252,7 @@ export function OrderProductHistoryTable({
                         ) : null}
                       </>
                     )}
-                    {item.itemType === "standard" ? (
+                    {item.showMaterialPlanning ? (
                       <div className="mt-1 space-y-1">
                         <div className="text-muted-foreground text-[11px]">
                           {item.materialPlannedAt
@@ -409,7 +418,7 @@ export function OrderProductHistoryTable({
                     ) : null}
                   </>
                 )}
-                {item.itemType === "standard" ? (
+                    {item.showMaterialPlanning ? (
                   <div className="mt-1 space-y-1">
                     <p className="text-muted-foreground text-[11px]">
                       {item.materialPlannedAt

@@ -11,6 +11,8 @@ import type { ActionMenuItem } from "@/lib/types/ui";
 import { cn } from "@/lib/utils";
 
 export function getDeliveryColumns(
+  onExportLabels: (delivery: DeliveryTableRow) => void,
+  onExportTemplate: (delivery: DeliveryTableRow) => void,
   onEdit: (delivery: DeliveryTableRow) => void,
   onDelete: (id: number) => void,
   t: (key: string) => string,
@@ -18,6 +20,16 @@ export function getDeliveryColumns(
   timeZone: string,
 ): Array<ColumnDef<DeliveryTableRow>> {
   const deliveryActions: Array<ActionMenuItem<DeliveryTableRow>> = [
+    {
+      label: t("actions.exportLabels"),
+      action: (delivery) => onExportLabels(delivery),
+      separatorAfter: true,
+    },
+    {
+      label: t("actions.exportTemplate"),
+      action: (delivery) => onExportTemplate(delivery),
+      separatorAfter: true,
+    },
     {
       label: t("actions.edit"),
       action: (delivery) => onEdit(delivery),

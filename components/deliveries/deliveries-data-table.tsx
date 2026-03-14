@@ -135,6 +135,14 @@ export function DeliveriesDataTable({
     [],
   );
 
+  const onExportLabels = useCallback((delivery: DeliveryTableRow) => {
+    window.location.assign(`/api/deliveries/${delivery.id}/labels`);
+  }, []);
+
+  const onExportTemplate = useCallback((delivery: DeliveryTableRow) => {
+    window.location.assign(`/api/deliveries/${delivery.id}/template`);
+  }, []);
+
   const onDeleteDelivery = useCallback(
     (deliveryId: number) => {
       const delivery = data.find((item) => item.id === deliveryId);
@@ -182,13 +190,23 @@ export function DeliveriesDataTable({
   const columns = useMemo(
     () =>
       getDeliveryColumns(
+        onExportLabels,
+        onExportTemplate,
         onEditDelivery,
         onDeleteDelivery,
         t,
         locale,
         timeZone,
       ),
-    [locale, onDeleteDelivery, onEditDelivery, t, timeZone],
+    [
+      locale,
+      onDeleteDelivery,
+      onEditDelivery,
+      onExportLabels,
+      onExportTemplate,
+      t,
+      timeZone,
+    ],
   );
 
   // eslint-disable-next-line react-hooks/incompatible-library

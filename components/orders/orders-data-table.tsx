@@ -724,7 +724,10 @@ export function OrdersDataTable({
               getHeaderClassName={getDesktopHeaderClassName}
               getCellClassName={getDesktopCellClassName}
               renderExpandedRow={(row) => (
-                <OrderProductHistoryTable orderId={row.id} />
+                <OrderProductHistoryTable
+                  orderId={row.id}
+                  orderStatus={row.status}
+                />
               )}
             />
           }

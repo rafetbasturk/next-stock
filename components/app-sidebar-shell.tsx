@@ -540,7 +540,7 @@ function AppSidebarLayout({
               />
             </div>
             <div className="min-w-0 group-data-[collapsible=icon]:hidden">
-              <p className="text-sm font-semibold leading-tight">Next Stock</p>
+              <p className="text-sm font-semibold leading-tight">{t("sidebarHeader")}</p>
               <p className="text-sidebar-foreground/70 truncate text-xs">
                 @{username}
               </p>

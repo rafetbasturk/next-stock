@@ -409,6 +409,29 @@ type DeliveryHistoryResult = {
   items: Array<DeliveryHistoryItem>;
 };
 
+type DeliveryLabelExportRow = {
+  orderNumber: string;
+  deliveryAddress: string;
+  productCode: string;
+  productName: string;
+  deliveryQuantity: number;
+  unit: string;
+  sortId: number;
+};
+
+export type DeliveryLabelExportResult = {
+  deliveryNumber: string;
+  kind: DeliveryKind;
+  rows: Array<{
+    orderNumber: string;
+    deliveryAddress: string;
+    productCode: string;
+    productName: string;
+    deliveryQuantity: number;
+    unit: string;
+  }>;
+};
+
 export async function getPaginatedDeliveries({
   data,
   timeZone,
@@ -1270,6 +1293,97 @@ export async function getDeliveryById({
   return {
     ...deliveryRow,
     items: [...standardItems, ...customItems],
+  };
+}
+
+export async function getDeliveryLabelExport({
+  data,
+}: ServerFnPayload<{ id: number }>): Promise<DeliveryLabelExportResult | null> {
+  const id = Number(data?.id);
+  if (!Number.isInteger(id) || id <= 0) return null;
+
+  const [deliveryRow] = await db
+    .select({
+      deliveryNumber: deliveries.deliveryNumber,
+      kind: deliveries.kind,
+    })
+    .from(deliveries)
+    .where(and(eq(deliveries.id, id), notDeleted(deliveries)))
+    .limit(1);
+
+  if (!deliveryRow) return null;
+
+  const [standardRows, customRows] = await Promise.all([
+    db
+      .select({
+        orderNumber: orders.orderNumber,
+        deliveryAddress: sql<string>`coalesce(${orders.deliveryAddress}, '')`,
+        productCode: sql<string>`coalesce(${products.code}, '')`,
+        productName: sql<string>`
+          coalesce(${products.name}, ${products.code}, '')
+        `,
+        deliveryQuantity: deliveryItems.deliveredQuantity,
+        unit: sql<string>`coalesce(${products.unit}, 'adet')`,
+        sortId: deliveryItems.id,
+      })
+      .from(deliveryItems)
+      .innerJoin(deliveries, eq(deliveries.id, deliveryItems.deliveryId))
+      .innerJoin(orderItems, eq(orderItems.id, deliveryItems.orderItemId))
+      .innerJoin(orders, eq(orders.id, orderItems.orderId))
+      .leftJoin(products, eq(products.id, orderItems.productId))
+      .where(
+        and(
+          eq(deliveryItems.deliveryId, id),
+          notDeleted(deliveryItems),
+          notDeleted(deliveries),
+          notDeleted(orderItems),
+          notDeleted(orders),
+        ),
+      ),
+    db
+      .select({
+        orderNumber: orders.orderNumber,
+        deliveryAddress: sql<string>`coalesce(${orders.deliveryAddress}, '')`,
+        productCode: sql<string>`coalesce(${customOrderItems.name}, '')`,
+        productName: sql<string>`
+          coalesce(${customOrderItems.notes}, ${customOrderItems.name}, '')
+        `,
+        deliveryQuantity: deliveryItems.deliveredQuantity,
+        unit: sql<string>`coalesce(${customOrderItems.unit}, 'adet')`,
+        sortId: deliveryItems.id,
+      })
+      .from(deliveryItems)
+      .innerJoin(deliveries, eq(deliveries.id, deliveryItems.deliveryId))
+      .innerJoin(
+        customOrderItems,
+        eq(customOrderItems.id, deliveryItems.customOrderItemId),
+      )
+      .innerJoin(orders, eq(orders.id, customOrderItems.orderId))
+      .where(
+        and(
+          eq(deliveryItems.deliveryId, id),
+          notDeleted(deliveryItems),
+          notDeleted(deliveries),
+          notDeleted(customOrderItems),
+          notDeleted(orders),
+        ),
+      ),
+  ]);
+
+  const rows: Array<DeliveryLabelExportRow> = [...standardRows, ...customRows];
+
+  rows.sort(
+    (left, right) =>
+      left.orderNumber.localeCompare(right.orderNumber, "tr", {
+        numeric: true,
+        sensitivity: "base",
+      }) || left.sortId - right.sortId,
+  );
+
+  return {
+    deliveryNumber: deliveryRow.deliveryNumber,
+    kind: deliveryRow.kind,
+    rows: rows.map(({ sortId: _sortId, ...row }) => row),
   };
 }
 

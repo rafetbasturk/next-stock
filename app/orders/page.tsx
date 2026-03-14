@@ -3,7 +3,6 @@ import { getTranslations } from "next-intl/server";
 
 import { CreateOrderButton } from "@/components/orders/create-order-button";
 import { OrdersMobileFilters } from "@/components/orders/orders-mobile-filters";
-import { OrdersTrackingButton } from "@/components/orders/orders-tracking-button";
 import { OrdersPageContent } from "@/components/orders/orders-page-content";
 import { RouteHeaderConfig } from "@/components/route-header-config";
 import {
@@ -42,7 +41,6 @@ export default async function Page({
     <>
       <RouteHeaderConfig title={t("pageTitles.orders")}>
         <OrdersMobileFilters search={search} />
-        <OrdersTrackingButton />
         <CreateOrderButton />
       </RouteHeaderConfig>
       <div className="h-[calc(100dvh-56px-2rem)] min-h-0 min-w-0 overflow-hidden md:h-[calc(100dvh-56px-3rem)]">

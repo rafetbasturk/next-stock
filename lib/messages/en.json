@@ -1,5 +1,6 @@
 {
   "App": {
+    "sidebarHeader": "Order Stock Tracking",
     "navigation": {
       "overview": "Overview",
       "orders": "Orders",
@@ -737,8 +738,21 @@
       "return": "Return"
     },
     "actions": {
+      "exportLabels": "Label Template",
+      "exportTemplate": "Delivery Template",
       "edit": "Edit",
       "delete": "Delete"
+    },
+    "export": {
+      "sheetName": "Delivery Labels",
+      "filenamePrefix": "delivery-labels",
+      "columns": {
+        "orderNumber": "ORDER NO",
+        "deliveryAddress": "DELIVERY PLACE",
+        "productCode": "CODE",
+        "productName": "DESCRIPTION",
+        "deliveryQuantity": "QTY"
+      }
     },
     "create": {
       "toasts": {

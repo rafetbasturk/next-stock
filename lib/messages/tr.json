@@ -1,5 +1,6 @@
 {
   "App": {
+    "sidebarHeader": "Sipariş Stok Takip",
     "navigation": {
       "overview": "Genel Bakış",
       "orders": "Siparişler",
@@ -737,8 +738,21 @@
       "return": "İade"
     },
     "actions": {
+      "exportLabels": "Etiket Şablonu",
+      "exportTemplate": "İrsaliye Şablonu",
       "edit": "Düzenle",
       "delete": "Sil"
+    },
+    "export": {
+      "sheetName": "Teslimat Etiketleri",
+      "filenamePrefix": "teslimat-etiketleri",
+      "columns": {
+        "orderNumber": "Sipariş No",
+        "deliveryAddress": "Teslimat Adresi",
+        "productCode": "Ürün Kodu",
+        "productName": "Ürün Adı",
+        "deliveryQuantity": "Adet"
+      }
     },
     "create": {
       "toasts": {
