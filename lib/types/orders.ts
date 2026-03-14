@@ -32,6 +32,7 @@ export type OrderTrackingTableRow = {
   orderId: number;
   itemId: number;
   itemType: "standard" | "custom";
+  productId: number | null;
   lineNumber: number;
   orderNumber: string;
   orderDate: string;
@@ -43,6 +44,9 @@ export type OrderTrackingTableRow = {
   notes: string | null;
   materialCode: string | null;
   materialName: string;
+  material: string | null;
+  specs: string | null;
+  specsNet: string | null;
   stockQuantity: number | null;
   orderedQuantity: number;
   deliveredQuantity: number;

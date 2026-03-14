@@ -624,6 +624,9 @@
       "notes": "Notes",
       "materialCode": "Material Code",
       "materialName": "Material Name",
+      "material": "Material",
+      "specs": "Specifications",
+      "specsNet": "Net Specifications",
       "stock": "Stock",
       "orderedQuantity": "Ordered",
       "deliveredQuantity": "Sent",
@@ -670,6 +673,7 @@
     "actions": {
       "openRoute": "Material Planning",
       "export": "Export Excel",
+      "exportChecking": "Checking...",
       "markPlanned": "Mark Material Planned",
       "markingPlanned": "Marking...",
       "planSuccess": "Material planning marked.",
@@ -680,6 +684,15 @@
     "export": {
       "sheetName": "Material Planning",
       "filenamePrefix": "material-planning",
+      "warningTitle": "Missing material or specifications",
+      "warningDescription": "Some rows are missing material or specification data.",
+      "warningBadge": "Review",
+      "warningSummary": "{count} rows will be exported with incomplete data.",
+      "missingMaterialLabel": "Rows missing material",
+      "missingSpecsLabel": "Rows missing specifications",
+      "warningContinue": "You can continue exporting, but the Excel file will contain blank cells for those fields.",
+      "cancel": "Cancel",
+      "continue": "Continue export",
       "columns": {
         "productCode": "Product Code",
         "productName": "Product Name",

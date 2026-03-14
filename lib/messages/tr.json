@@ -624,6 +624,9 @@
       "notes": "Notlar",
       "materialCode": "Malzeme Kodu",
       "materialName": "Malzeme İsmi",
+      "material": "Malzeme",
+      "specs": "Ölçü",
+      "specsNet": "Net Ölçü",
       "stock": "Stok",
       "orderedQuantity": "Sipariş Adedi",
       "deliveredQuantity": "Gönderilen",
@@ -670,6 +673,7 @@
     "actions": {
       "openRoute": "Malzeme Planlama",
       "export": "Excel Aktar",
+      "exportChecking": "Kontrol ediliyor...",
       "markPlanned": "Malzeme Planlandı",
       "markingPlanned": "İşleniyor...",
       "planSuccess": "Malzeme planlama tamamlandı olarak işaretlendi.",
@@ -680,6 +684,15 @@
     "export": {
       "sheetName": "Malzeme Planlama",
       "filenamePrefix": "malzeme-planlama",
+      "warningTitle": "Malzeme veya ölçü eksik",
+      "warningDescription": "Bazı satırlarda malzeme veya ölçü bilgisi eksik.",
+      "warningBadge": "Kontrol",
+      "warningSummary": "{count} satır eksik veriyle dışa aktarılacak.",
+      "missingMaterialLabel": "Malzeme eksiği olan satır",
+      "missingSpecsLabel": "Ölçü eksiği olan satır",
+      "warningContinue": "Dışa aktarmaya devam edebilirsiniz, ancak Excel dosyasında bu alanlar boş hücre olarak yer alacaktır.",
+      "cancel": "İptal",
+      "continue": "Aktarmaya devam et",
       "columns": {
         "productCode": "Ürün Kodu",
         "productName": "Ürün Adı",

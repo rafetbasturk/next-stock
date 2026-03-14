@@ -615,6 +615,18 @@ export function OrdersTrackingDataTable({
                       }
                     />
                     <DataTableMobileField
+                      label={t("columns.material")}
+                      value={row.material?.trim() || "-"}
+                    />
+                    <DataTableMobileField
+                      label={t("columns.specs")}
+                      value={row.specs?.trim() || "-"}
+                    />
+                    <DataTableMobileField
+                      label={t("columns.specsNet")}
+                      value={row.specsNet?.trim() || "-"}
+                    />
+                    <DataTableMobileField
                       label={t("columns.customer")}
                       value={
                         row.customerCode?.trim() || row.customerName?.trim()

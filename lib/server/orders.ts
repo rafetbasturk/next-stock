@@ -162,6 +162,13 @@ type PaginatedMaterialPlanningResult = {
   pageCount: number;
 };
 
+type MaterialPlanningExportWarningResult = {
+  hasWarnings: boolean;
+  missingMaterialCount: number;
+  missingSpecsCount: number;
+  rowsWithMissingValuesCount: number;
+};
+
 type OrderFilterOptionsResult = {
   statuses: Array<string>;
   customers: Array<{
@@ -568,6 +575,9 @@ function buildOrderTrackingSearchText(row: OrderTrackingTableRow): string {
     row.notes ?? "",
     row.materialCode ?? "",
     row.materialName,
+    row.material ?? "",
+    row.specs ?? "",
+    row.specsNet ?? "",
     row.stockQuantity == null ? "" : String(row.stockQuantity),
     String(row.orderedQuantity),
     String(row.deliveredQuantity),
@@ -777,6 +787,7 @@ export async function getPaginatedOrderTracking({
         orderId: orders.id,
         itemId: orderItems.id,
         itemType: sql<"standard">`'standard'`,
+        productId: orderItems.productId,
         orderNumber: orders.orderNumber,
         orderDate: orders.orderDate,
         customerId: orders.customerId,
@@ -789,6 +800,9 @@ export async function getPaginatedOrderTracking({
         materialName: sql<string>`
           coalesce(${products.name}, ${products.code}, '')
         `,
+        material: products.material,
+        specs: products.specs,
+        specsNet: products.specsNet,
         stockQuantity: products.stockQuantity,
         orderedQuantity: orderItems.quantity,
         deliveredQuantity: sql<number>`
@@ -813,6 +827,7 @@ export async function getPaginatedOrderTracking({
         orderId: orders.id,
         itemId: customOrderItems.id,
         itemType: sql<"custom">`'custom'`,
+        productId: sql<number | null>`null`,
         orderNumber: orders.orderNumber,
         orderDate: orders.orderDate,
         customerId: orders.customerId,
@@ -823,6 +838,9 @@ export async function getPaginatedOrderTracking({
         notes: orders.notes,
         materialCode: sql<string | null>`null`,
         materialName: customOrderItems.name,
+        material: sql<string | null>`null`,
+        specs: sql<string | null>`null`,
+        specsNet: sql<string | null>`null`,
         stockQuantity: sql<number | null>`null`,
         orderedQuantity: customOrderItems.quantity,
         deliveredQuantity: sql<number>`
@@ -1079,6 +1097,26 @@ export async function getMaterialPlanningRows(
   return aggregateMaterialPlanningRows(sourceRows).sort(
     createMaterialPlanningRowComparator(sortBy, sortDir),
   );
+}
+
+export async function getMaterialPlanningExportWarnings(
+  data: unknown,
+): Promise<MaterialPlanningExportWarningResult> {
+  const rows = await getMaterialPlanningRows(data);
+  const missingMaterialCount = rows.filter(
+    (row) => !row.material?.trim(),
+  ).length;
+  const missingSpecsCount = rows.filter((row) => !row.specs?.trim()).length;
+  const rowsWithMissingValuesCount = rows.filter(
+    (row) => !row.material?.trim() || !row.specs?.trim(),
+  ).length;
+
+  return {
+    hasWarnings: rowsWithMissingValuesCount > 0,
+    missingMaterialCount,
+    missingSpecsCount,
+    rowsWithMissingValuesCount,
+  };
 }
 
 export async function getOrderTrackingFilterOptions(): Promise<OrderFilterOptionsResult> {

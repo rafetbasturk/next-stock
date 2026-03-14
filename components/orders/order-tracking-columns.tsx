@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ColumnDef } from "@tanstack/react-table";
 
 import StatusBadge from "@/components/status-badge";
@@ -90,7 +91,26 @@ export function getOrderTrackingColumns(
       meta: {
         headerLabel: t("columns.materialCode"),
       },
-      cell: ({ row }) => row.original.materialCode?.trim() || "-",
+      cell: ({ row }) => {
+        const code = row.original.materialCode?.trim();
+
+        if (!code) {
+          return "-";
+        }
+
+        if (!row.original.productId) {
+          return code;
+        }
+
+        return (
+          <Link
+            href={`/products/${row.original.productId}`}
+            className="text-primary underline-offset-4 hover:underline"
+          >
+            {code}
+          </Link>
+        );
+      },
     },
     {
       accessorKey: "materialName",
@@ -100,6 +120,36 @@ export function getOrderTrackingColumns(
       },
       cell: ({ row }) => (
         <div className="truncate">{row.original.materialName}</div>
+      ),
+    },
+    {
+      accessorKey: "material",
+      size: 140,
+      meta: {
+        headerLabel: t("columns.material"),
+      },
+      cell: ({ row }) => (
+        <div className="truncate">{row.original.material?.trim() || "-"}</div>
+      ),
+    },
+    {
+      accessorKey: "specs",
+      size: 160,
+      meta: {
+        headerLabel: t("columns.specs"),
+      },
+      cell: ({ row }) => (
+        <div className="truncate">{row.original.specs?.trim() || "-"}</div>
+      ),
+    },
+    {
+      accessorKey: "specsNet",
+      size: 160,
+      meta: {
+        headerLabel: t("columns.specsNet"),
+      },
+      cell: ({ row }) => (
+        <div className="truncate">{row.original.specsNet?.trim() || "-"}</div>
       ),
     },
     {
